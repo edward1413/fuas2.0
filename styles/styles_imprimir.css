@@ -1,0 +1,112 @@
+body {
+    background-color: #15253a;
+}
+
+/* Ocultar el contenedor en modo pantalla normal */
+#print-marks {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+    width: 21cm;
+    height: 29.7cm;
+    font-size: 14pt;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    color: black;
+    letter-spacing: 2px;
+}
+
+/* Mostrar solo al imprimir */
+@media print {
+
+    /* Configuración para la página A4 */
+    @page {
+        size: A4;
+        margin: 0;
+        /* Eliminar márgenes para asegurarnos de que todo el contenido esté dentro de la página */
+    }
+
+    body * {
+        margin: 0;
+        padding: 0;
+        visibility: hidden;
+    }
+
+    #print-marks,
+    #print-marks * {
+        visibility: visible;
+    }
+
+    #print-marks {
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        font-size: 14pt;
+        font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        color: black;
+        letter-spacing: 2px;
+        page-break-inside: avoid;
+        break-inside: avoid;
+    }
+
+    .x-mark {
+        position: absolute;
+        font-size: 15px;
+        font-weight: bold;
+    }
+
+    /* Asegurarse de que el contenedor y los elementos no se dividan */
+    .impresion-fua,
+    .marcas {
+        display: block !important;
+    }
+
+    /* Forzar que todo el contenido esté dentro de los límites de la página */
+    #print-marks {
+        width: 21cm;
+        /* Ancho de la página */
+        height: 29.7cm;
+        /* Alto de la página */
+        overflow: hidden;
+        /* Evita que el contenido se desborde */
+    }
+
+    /* Evitar cualquier tipo de salto de página innecesario */
+    .x-mark {
+        page-break-before: avoid;
+        page-break-after: avoid;
+    }
+
+    .fecha-separada {
+        letter-spacing: 10px;
+    }
+
+    .fecha-separada-anio-nac {
+        letter-spacing: 20px;
+    }
+
+    .fecha-separada-ate {
+        letter-spacing: 15px;
+    }
+
+    .hora-separada {
+        letter-spacing: 5px;
+    }
+
+    .descripcion-cie10 {
+        position: absolute;
+        top: 22cm;
+        left: 1.5cm;
+        width: 8.9cm;
+        word-wrap: break-word;
+        white-space: normal;
+        font-size: 11px !important;
+        font-weight: normal !important;
+        word-spacing: 1mm;
+        letter-spacing: 0.2mm;
+    }
+}
