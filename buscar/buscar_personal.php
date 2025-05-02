@@ -11,7 +11,7 @@ if (!empty($nombrePersonal)) {
         $conditions[] = "(numero_documento_personal LIKE ? OR nombres_personal LIKE ? OR apellido_paterno_personal LIKE ? OR apellido_materno_personal LIKE ?)";
     }
 
-    $query = "SELECT mp.numero_documento_personal, mp.nombres_personal,
+    $query = "SELECT mp.id_tipo_documento_personal, mp.numero_documento_personal, mp.nombres_personal,
                 mp.apellido_paterno_personal, mp.apellido_materno_personal,
                 p.descripcion, mp.id_profesion, mp.numero_colegiatura,
                 mp.especialidad, mp.numero_especialidad
@@ -42,7 +42,11 @@ if (!empty($nombrePersonal)) {
                         data-nombres-personal="' . htmlspecialchars($fila['nombres_personal']) . '"
                         data-apellido-paterno-personal="' . htmlspecialchars($fila['apellido_paterno_personal']) . '"
                         data-apellido-materno-personal="' . htmlspecialchars($fila['apellido_materno_personal']) . '"
-                        data-fecha-nacimiento-personal="' . htmlspecialchars($fila['fecha_nacimiento_personal']) . '">
+                        data-id-profesion="' . htmlspecialchars($fila['id_profesion']) . '"
+                        data-profesion="' . htmlspecialchars($fila['descripcion']) . '"
+                        data-numero-colegiatura="' . htmlspecialchars($fila['numero_colegiatura']) . '"
+                        data-especialidad="' . htmlspecialchars($fila['especialidad']) . '"
+                        data-numero-especialidad="' . htmlspecialchars($fila['numero_especialidad']) . '">
                         <div id="resultado-nombres-personal" class="fw-bold">' .
                     htmlspecialchars($fila['nombres_personal']) . ' ' .
                     htmlspecialchars($fila['apellido_paterno_personal']) . ' ' .

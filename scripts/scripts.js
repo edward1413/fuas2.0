@@ -36,6 +36,41 @@ document.addEventListener('DOMContentLoaded', function () {
     })
 });
 
+// Escuchar cambios en el switch
+document.getElementById('switchcie10').addEventListener('change', function () {
+    const codigoCIE10 = document.getElementById('codigo-cie10');
+    const descripcionCIE10 = document.getElementById('descripcion-cie10');
+    const buscarCIE10 = document.getElementById('buscar-cie10');
+    const mensajeDeshabilitado = document.getElementById('mensaje-deshabilitado');
+    const mensajeHabilitado = document.getElementById('mensaje-habilitado');
+
+
+    if (this.checked) {
+        codigoCIE10.disabled = false;
+        descripcionCIE10.disabled = false;
+        buscarCIE10.disabled = false;
+        mensajeDeshabilitado.style.display = 'none';
+        mensajeHabilitado.style.display = 'inline';
+    } else {
+        codigoCIE10.value = '';
+        descripcionCIE10.value = '';
+        buscarCIE10.value = '';
+
+        codigoCIE10.disabled = true;
+        descripcionCIE10.disabled = true;
+        buscarCIE10.disabled = true;
+
+        mensajeDeshabilitado.style.display = 'inline';
+        mensajeHabilitado.style.display = 'none';
+    }
+
+});
+
+// Deshabilitar los campos al cargar la página
+document.getElementById('codigo-cie10').disabled = true;
+document.getElementById('descripcion-cie10').disabled = true;
+document.getElementById('buscar-cie10').disabled = true;
+
 // Aplica la función al id del index.php
 convertirAMayusculas('buscar-paciente');
 convertirAMayusculas('buscar-personal');

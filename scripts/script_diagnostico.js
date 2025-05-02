@@ -8,6 +8,7 @@ import { highlightItem, seleccionarCIE10, debounce } from './funciones.js';
 document.addEventListener('DOMContentLoaded', function () {
     // Capturamos el input donde el usuario escribe el término de búsqueda
     const buscarCIE10 = document.getElementById('buscar-cie10');
+    const codigoCIE10 = document.getElementById('codigo-cie10');
     // Capturamos el contenedor donde se mostrarán los resultados de la búsqueda
     const resultadosCIE10 = document.getElementById('resultado-cie10');
 
@@ -78,5 +79,30 @@ document.addEventListener('DOMContentLoaded', function () {
         const item = event.target.closest('.search-item');
         if (!item) return;  // Si no se hace clic en un resultado válido, no hacemos nada
         seleccionarCIE10(item);  // Llamamos a la función para seleccionar el diagnóstico
+    });
+
+    // Manejar presionar Enter en el campo de código CIE-10
+    document.getElementById('codigo-cie10').addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') {
+            const codigo = this.value.trim();
+            if (codigo.length >= 4) {
+                fetch(`buscar/buscar_cie10.php?codigoCIE10=${encodeURIComponent(codigo)}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        const descripcionCIE10 = document.getElementById('descripcion-cie10');
+                        if (data.success) {
+                            descripcionCIE10.value = data.descripcion_cie10;
+                        } else {
+                            // Mostrar mensaje en el campo de descripción si no se encuentra el código
+                            descripcionCIE10.value = 'Diagnóstico no encontrado';
+                        }
+                    })
+                    .catch(error => {
+                        console.error("Error:", error);
+                        // Opcional: mostrar un mensaje de error en otro lugar del formulario
+                        document.getElementById('descripcion-cie10').value = 'Error al buscar el diagnóstico';
+                    });
+            }
+        }
     });
 });

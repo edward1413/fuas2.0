@@ -143,7 +143,7 @@
                         <h2 class="section-title">LUGAR DE ATENCIÓN</h2>
                         <div class="form-check form-check-inline">
                             <input class="form-check-input" type="radio" name="lugar-atencion" id="intramural"
-                                value="intramural">
+                                value="intramural" checked>
                             <label class="form-check-label" for="intramural">INTRAMURAL</label>
                         </div>
                         <div class="form-check form-check-inline">
@@ -215,12 +215,7 @@
             </div>
         </footer>
     </div>
-    <!-- Campos ocultos -->
-    <input type="hidden" id="id-tipo-documento-paciente">
-    <input type="hidden" id="genero-paciente">
-    <input type="hidden" id="id-profesion">
-    <input type="hidden" id="especialidad">
-
+ 
     <!-- Bootstrap 5 JS  para el Bundle con el Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <!-- jQuery -->

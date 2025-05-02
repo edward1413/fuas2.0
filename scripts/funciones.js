@@ -49,7 +49,7 @@ export function seleccionarPaciente(item) {
         const edad = calcularEdad(fechaNacimientoPaciente);
         document.getElementById('edad-paciente').value = edad;
     }
-    
+
     document.getElementById('form-paciente').classList.remove('d-none');
     // Limpiar y ocultar resultados
     limpiarOcultar();
@@ -68,6 +68,35 @@ export function calcularEdad(fechaNacimientoPaciente) {
 
     return edad;
 }
+
+export function seleccionarPersonal(item) {
+    // Extraer los datos del atributo `data-*`
+    const numeroDocumentoPersonal = item.getAttribute('data-dni-personal');
+    const nombresPersonal = item.getAttribute('data-nombres-personal')?.trim() || '';
+    const apellidoPaternoPersonal = item.getAttribute('data-apellido-paterno-personal')?.trim() || '';
+    const apellidoMaternoPersonal = item.getAttribute('data-apellido-materno-personal')?.trim() || '';
+    const profesionPersonal = item.getAttribute('data-profesion')?.trim() || '';
+    const colegiaturaPersonal = item.getAttribute('data-numero-colegiatura')?.trim() || '';
+    const especialidadPersonal = item.getAttribute('data-especialidad')?.trim() || '';
+
+    // Concatenar nombre completo (ignorando campos vacíos)
+    const nombresCompletoPersonal = [nombresPersonal, apellidoPaternoPersonal, apellidoMaternoPersonal]
+        .filter(part => part !== '') // Eliminar partes vacías
+        .join(' '); // Unir con espacios
+
+    // Asignar valores a los campos del formulario
+    document.getElementById('nombres-completos-personal').value = nombresCompletoPersonal;
+    document.getElementById('documento-personal').value = numeroDocumentoPersonal;
+    document.getElementById('profesion-personal').value = profesionPersonal;
+    document.getElementById('colegiatura-personal').value = colegiaturaPersonal;
+    document.getElementById('numero-especialidad-personal').value = especialidadPersonal;
+
+
+    document.getElementById('form-personal').classList.remove('d-none');
+    // Limpiar y ocultar resultados
+    limpiarOcultar();
+}
+
 
 // Función para limpiar campos y ocultar resultados de búsqueda
 export function limpiarOcultar() {

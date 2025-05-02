@@ -2,7 +2,7 @@
 // highlightItem: Resalta el elemento seleccionado en la lista de búsqueda
 // seleccionarpersonal: Maneja la selección de un diagnóstico al hacer clic o presionar Enter
 // debounce: Retrasa la ejecución de la búsqueda para evitar llamadas excesivas al servidor
-import { highlightItem, seleccionarpersonal, debounce } from './funciones.js';
+import { highlightItem, seleccionarPersonal, debounce } from './funciones.js';
 
 // Esperamos a que el documento HTML esté completamente cargado antes de ejecutar el código
 document.addEventListener('DOMContentLoaded', function () {
@@ -67,7 +67,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 break;
             case 'Enter':  // Si el usuario presiona Enter, seleccionamos el elemento resaltado
                 if (selectedIndex >= 0) {
-                    seleccionarpersonal(currentResults[selectedIndex]);  // Llamamos a la función para seleccionar el diagnóstico
+                    seleccionarPersonal(currentResults[selectedIndex]);  // Llamamos a la función para seleccionar el diagnóstico
                 }
                 break;
         }
@@ -78,6 +78,6 @@ document.addEventListener('DOMContentLoaded', function () {
         // Identificamos el elemento clickeado más cercano con la clase 'search-item'
         const item = event.target.closest('.search-item');
         if (!item) return;  // Si no se hace clic en un resultado válido, no hacemos nada
-        seleccionarpersonal(item);  // Llamamos a la función para seleccionar el diagnóstico
+        seleccionarPersonal(item);  // Llamamos a la función para seleccionar el diagnóstico
     });
 });
