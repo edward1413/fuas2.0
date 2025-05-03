@@ -36,7 +36,35 @@
         position: absolute;
         font-family: Arial, sans-serif;
         font-weight: bold;
-        font-size: 12pt;
+        font-size: 10pt;
         color: black;
+        word-spacing: 2pt;
+        letter-spacing: 1pt;
+    }
+
+    .fecha-atencion {
+        letter-spacing: 11.25pt;
+    }
+
+    .hora-atencion {
+        letter-spacing: 3.75pt;
+    }
+
+    .fecha-nacimiento {
+        letter-spacing: 8pt;
+    }
+
+    .fecha-nacimiento-anio {
+        letter-spacing: 16pt;
+    }
+
+    .descripcion-cie10 {
+        width: 8.9cm;
+        word-wrap: break-word;
+        white-space: normal;
+        font-size: 7pt !important;
+        font-weight: normal !important;
+        word-spacing: 1mm;
+        letter-spacing: 0.2mm;
     }
 }

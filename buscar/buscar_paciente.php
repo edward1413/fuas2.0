@@ -38,10 +38,12 @@ if (!empty($nombrePaciente)) {
                 // Añade `data-*` para los nuevos campos: fecha_nacimiento_paciente y genero_paciente
                 echo '<div class="search-item" 
                         data-dni-paciente="' . htmlspecialchars($numeroDocumentoPaciente) . '" 
+                        data-tipo-documento-paciente="' . htmlspecialchars($fila['id_tipo_documento_paciente']) . '" 
                         data-nombres-paciente="' . htmlspecialchars($fila['nombres_paciente']) . '"
                         data-apellido-paterno-paciente="' . htmlspecialchars($fila['apellido_paterno_paciente']) . '"
                         data-apellido-materno-paciente="' . htmlspecialchars($fila['apellido_materno_paciente']) . '"
-                        data-fecha-nacimiento-paciente="' . htmlspecialchars($fila['fecha_nacimiento_paciente']) . '">
+                        data-fecha-nacimiento-paciente="' . htmlspecialchars($fila['fecha_nacimiento_paciente']) . '"
+                        data-genero-paciente="' . htmlspecialchars($fila['genero_paciente']) . '">
                         <div id="resultado-nombres-paciente" class="fw-bold">' .
                     htmlspecialchars($fila['nombres_paciente']) . ' ' .
                     htmlspecialchars($fila['apellido_paterno_paciente']) . ' ' .

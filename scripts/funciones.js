@@ -25,24 +25,42 @@ export function seleccionarCIE10(item) {
     document.getElementById('codigo-cie10').value = codigoCIE10;
     document.getElementById('descripcion-cie10').value = descripcionCIE10;
 
+    // Guardar el valor del tipo de documento en sessionStorage
+    sessionStorage.setItem('codigoCIE10', codigoCIE10);
+    sessionStorage.setItem('descripcionCIE10', descripcionCIE10);
+
     // Llama a la función para limpiar y ocultar resultados
     limpiarOcultar();
 }
 
 export function seleccionarPaciente(item) {
     // Extraer los datos del atributo `data-*`
+    const tipoDocumentoPaciente = item.getAttribute('data-tipo-documento-paciente');
     const numeroDocumentoPaciente = item.getAttribute('data-dni-paciente');
     const nombresPaciente = item.getAttribute('data-nombres-paciente');
     const apellidoPaternoPaciente = item.getAttribute('data-apellido-paterno-paciente');
     const apellidoMaternoPaciente = item.getAttribute('data-apellido-materno-paciente');
     const fechaNacimientoPaciente = item.getAttribute('data-fecha-nacimiento-paciente');
+    const nombresSeparados = nombresPaciente.trim().split(' ');
+    const generoPaciente = item.getAttribute('data-genero-paciente');
 
     // Asignar valores a los campos del formulario
+    document.getElementById('documento-paciente').value = numeroDocumentoPaciente;
     document.getElementById('nombres-paciente').value = nombresPaciente;
     document.getElementById('apellido-paterno-paciente').value = apellidoPaternoPaciente;
     document.getElementById('apellido-materno-paciente').value = apellidoMaternoPaciente;
-    document.getElementById('documento-paciente').value = numeroDocumentoPaciente;
     document.getElementById('fecha-nacimiento-paciente').value = fechaNacimientoPaciente;
+
+    // Guardar el valor del tipo de documento en sessionStorage
+    sessionStorage.setItem('tipoDocumentoPaciente', tipoDocumentoPaciente);
+    sessionStorage.setItem('numeroDocumentoPaciente', numeroDocumentoPaciente); 
+    sessionStorage.setItem('primerNombrePaciente', nombresSeparados[0]);
+    sessionStorage.setItem('otrosNombresPaciente', nombresSeparados.slice(1).join(' '));
+    sessionStorage.setItem('apellidoPaternoPaciente', apellidoPaternoPaciente);
+    sessionStorage.setItem('apellidoMaternoPaciente', apellidoMaternoPaciente);
+    sessionStorage.setItem('fechaNacimientoPaciente', fechaNacimientoPaciente);
+    sessionStorage.setItem('generoPaciente', generoPaciente);
+
 
     // Calcular y asignar la edad (opcional)
     if (fechaNacimientoPaciente) {

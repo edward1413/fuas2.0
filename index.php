@@ -60,7 +60,8 @@
                             </div>
                             <div class="col-md-4">
                                 <label class="form-label">F. Nacimiento</label>
-                                <input type="text" id="fecha-nacimiento-paciente" class="form-control form-control-sm" readonly>
+                                <input type="text" id="fecha-nacimiento-paciente" class="form-control form-control-sm"
+                                    readonly>
                             </div>
                             <div class="col-md-4">
                                 <label class="form-label">Edad</label>
@@ -88,7 +89,8 @@
                         <div class="row g-2">
                             <div class="col-md-3">
                                 <label class="form-label">DNI</label>
-                                <input type="text" id="documento-personal" class="form-control form-control-sm" readonly>
+                                <input type="text" id="documento-personal" class="form-control form-control-sm"
+                                    readonly>
                             </div>
                             <div class="col-md-9">
                                 <label class="form-label">Nombres</label>
@@ -215,7 +217,7 @@
             </div>
         </footer>
     </div>
- 
+
     <!-- Bootstrap 5 JS  para el Bundle con el Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <!-- jQuery -->

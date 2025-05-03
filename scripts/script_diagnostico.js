@@ -8,7 +8,6 @@ import { highlightItem, seleccionarCIE10, debounce } from './funciones.js';
 document.addEventListener('DOMContentLoaded', function () {
     // Capturamos el input donde el usuario escribe el término de búsqueda
     const buscarCIE10 = document.getElementById('buscar-cie10');
-    const codigoCIE10 = document.getElementById('codigo-cie10');
     // Capturamos el contenedor donde se mostrarán los resultados de la búsqueda
     const resultadosCIE10 = document.getElementById('resultado-cie10');
 
@@ -92,6 +91,8 @@ document.addEventListener('DOMContentLoaded', function () {
                         const descripcionCIE10 = document.getElementById('descripcion-cie10');
                         if (data.success) {
                             descripcionCIE10.value = data.descripcion_cie10;
+                            sessionStorage.setItem('codigoCIE10', codigo);
+                            sessionStorage.setItem('descripcionCIE10', data.descripcion_cie10);
                         } else {
                             // Mostrar mensaje en el campo de descripción si no se encuentra el código
                             descripcionCIE10.value = 'Diagnóstico no encontrado';
