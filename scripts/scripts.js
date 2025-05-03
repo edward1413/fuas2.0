@@ -6,15 +6,29 @@ document.addEventListener('DOMContentLoaded', function () {
     /// JS PARA DIAGNOSTICOS ///
     ////////////////////////////
     // Obtiene una referencia al elemento del DOM con el ID "codigo-cie10"
-    // y lo almacena en la variable inputCIE10.
-    var inputCIE10 = document.getElementById('codigo-cie10');
+    // y lo almacena en la variable codigoCIE10.
+    var codigoCIE10 = document.getElementById('codigo-cie10');
     // Agrega un evento 'input' al campo de entrada. Este evento se dispara cada vez 
     // que el valor del campo cambia (por ejemplo, cuando el usuario escribe o pega texto).
-    inputCIE10.addEventListener('input', function () {
+    codigoCIE10.addEventListener('input', function () {
         // Limita la longitud del texto ingresado a un máximo de 4 caracteres.
         // Si el usuario intenta ingresar más de 4, solo se mantienen los primeros 4.
         if (this.value.length > 4) {
             this.value = this.value.slice(0, 4); // Corta el texto hasta el carácter 4
+        }
+        // Si ya tiene 3 dígitos, disparar automáticamente el evento "Enter"
+        if (this.value.length === 4) {
+            // Crear un evento de teclado simulando "Enter"
+            var enterEvent = new KeyboardEvent('keydown', {  // Crear un nuevo evento de teclado
+                // Definir el tipo de evento como 'keydown' (tecla presionada hacia abajo)
+                key: 'Enter', // Especificar la tecla como 'Enter'
+                keyCode: 13, // Código de la tecla 'Enter'
+                which: 13, // Código de la tecla 'Enter' (deprecated, pero a veces usado)
+                bubbles: true // Permitir que el evento burbujee (propague) hacia arriba en el DOM
+            });
+
+            // Disparar el evento en el campo
+            this.dispatchEvent(enterEvent);
         }
     });
 
@@ -25,14 +39,28 @@ document.addEventListener('DOMContentLoaded', function () {
     var codigoPrestacion = document.getElementById('codigo-prestacion');
     //agregamos un input al campo de la entrada
     codigoPrestacion.addEventListener('input', function () {
+        //limitamos a solo numeros
+        this.value = this.value.replace(/[^0-9]/g, '');
         //limitamos la longitud a 3 caracteres
         if (this.value.length > 3) { // Comprueba si la longitud del valor actual del elemento (this.value) es mayor que 3.
             this.value = this.value.slice(0, 3); // Si la condición anterior es verdadera, esta línea actualiza el valor del elemento.
             // .slice(0, 3) crea una nueva cadena que contiene solo los primeros 3 caracteres del valor original (desde el índice 0 hasta el índice 2).
             // Esta nueva cadena se asigna de nuevo a this.value, truncando el valor a un máximo de 3 caracteres.
         }
-        //limitamos a solo numeros
-        this.value = this.value.replace(/[^0-9]/g, '');
+        // Si ya tiene 3 dígitos, disparar automáticamente el evento "Enter"
+        if (this.value.length === 3) {
+            // Crear un evento de teclado simulando "Enter"
+            var enterEvent = new KeyboardEvent('keydown', {  // Crear un nuevo evento de teclado
+                // Definir el tipo de evento como 'keydown' (tecla presionada hacia abajo)
+                key: 'Enter', // Especificar la tecla como 'Enter'
+                keyCode: 13, // Código de la tecla 'Enter'
+                which: 13, // Código de la tecla 'Enter' (deprecated, pero a veces usado)
+                bubbles: true // Permitir que el evento burbujee (propague) hacia arriba en el DOM
+            });
+
+            // Disparar el evento en el campo
+            this.dispatchEvent(enterEvent);
+        }
     })
 });
 

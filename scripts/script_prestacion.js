@@ -20,8 +20,8 @@ document.getElementById('codigo-prestacion').addEventListener('keydown', functio
                     var descripcionprestacion = document.getElementById('descripcion-prestacion');
                     // Verificar si la respuesta indica éxito
                     if (response.success) {
-                        // Establecer el valor del campo de descripción con la descripción obtenida de la consulta de la columna descripcion
-                        descripcionprestacion.value = response.descripcion;
+                        // Establecer el valor del campo de descripción con la descripción obtenida de la consulta de la columna descripcion_prestacion
+                        descripcionprestacion.value = response.descripcion_prestacion;
                         sessionStorage.setItem('codigoPrestacion', codigoPrestacion); // Guardar el código de prestación en sessionStorage
                     } else {
                         // Si no se encontró el código, establecer un mensaje de error

@@ -13483,7 +13483,7 @@ CREATE TABLE `maestro_personal` (
 --
 
 INSERT INTO `maestro_personal` (`id_personal`, `id_tipo_documento_personal`, `numero_documento_personal`, `apellido_paterno_personal`, `apellido_materno_personal`, `nombres_personal`, `fecha_nacimiento_personal`, `id_profesion`, `numero_colegiatura`, `especialidad`, `numero_especialidad`) VALUES
-(1, 2, '73438638', 'SPARROW', 'DIAZ', 'KARLA ELVIRA GIULIANA', '1993-03-12', 8, '2354', '', NULL),
+(1, 2, '73438638', 'SPARROW', 'DIAZ', 'KARLA ELVIRA GIULIANA', '1993-03-12', 8, '2354', '', ''),
 (2, 2, '40732604', 'CRESPIN', 'CHAVEZ', 'ESTEBAN SAMUEL', '1980-11-25', 8, '5221', '', ''),
 (3, 2, '41449213', 'MENDOZA', 'MENDEZ', 'SELENE', '1982-07-07', 11, '', '', ''),
 (4, 2, '41860860', 'ROJAS', 'CRUZ', 'DIANA BIANCA', '1983-07-15', 11, '', '', ''),
@@ -13520,7 +13520,7 @@ CREATE TABLE `prestacion` (
 -- Volcado de datos para la tabla `prestacion`
 --
 
-INSERT INTO `prestacion` (`id_prestacion`, `codigo`, `descripcion`) VALUES
+INSERT INTO `prestacion` (`id_prestacion`, `codigo_prestacion`, `descripcion_prestacion`) VALUES
 (1, 1, 'Control de crecimiento y desarrollo en menores entre 0 - 4 años'),
 (2, 2, 'Control del recién nacido con menos de 2,500 gr, prematuro, con secuelas al nacer'),
 (3, 5, 'Consejería nutricional para niñas o niños en riesgo nutricional y desnutrición '),
@@ -13595,24 +13595,24 @@ INSERT INTO `prestacion` (`id_prestacion`, `codigo`, `descripcion`) VALUES
 
 CREATE TABLE `profesion` (
   `id_profesion` int(3) NOT NULL,
-  `descripcion` varchar(25) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL
+  `descripcion_profesion` varchar(25) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `profesion`
 --
 
-INSERT INTO `profesion` (`id_profesion`, `descripcion`) VALUES
+INSERT INTO `profesion` (`id_profesion`, `descripcion_profesion`) VALUES
 (1, 'MEDICO'),
 (2, 'FARMACEUTICO'),
-(3, 'BIOLOGO'),
-(4, 'OBSTETRIZ'),
-(5, 'ENFERMERA'),
+(3, 'CIRUJANO DENTISTA'),
+(4, 'BIOLOGO'),
+(5, 'OBSTETRIZ'),
 (6, 'ENFERMERA'),
 (7, 'TRABAJADORA SOCIAL'),
 (8, 'PSICOLOGA'),
 (9, 'TECNOLOGO MEDICO'),
-(10, 'NUTRICION'),
+(10, 'NUTRICIONISTA'),
 (11, 'TECNICO ENFERMERIA'),
 (12, 'AUXILIAR ENFERMERIA'),
 (13, 'OTRO');

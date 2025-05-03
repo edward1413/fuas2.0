@@ -93,9 +93,11 @@ export function seleccionarPersonal(item) {
     const nombresPersonal = item.getAttribute('data-nombres-personal')?.trim() || '';
     const apellidoPaternoPersonal = item.getAttribute('data-apellido-paterno-personal')?.trim() || '';
     const apellidoMaternoPersonal = item.getAttribute('data-apellido-materno-personal')?.trim() || '';
+    const idProfesion = item.getAttribute('data-id-profesion')?.trim() || '';
     const profesionPersonal = item.getAttribute('data-profesion')?.trim() || '';
     const colegiaturaPersonal = item.getAttribute('data-numero-colegiatura')?.trim() || '';
     const especialidadPersonal = item.getAttribute('data-especialidad')?.trim() || '';
+    const numeroEspecialidad = item.getAttribute('data-numero-especialidad')?.trim() || '';
 
     // Concatenar nombre completo (ignorando campos vacíos)
     const nombresCompletoPersonal = [nombresPersonal, apellidoPaternoPersonal, apellidoMaternoPersonal]
@@ -109,7 +111,15 @@ export function seleccionarPersonal(item) {
     document.getElementById('colegiatura-personal').value = colegiaturaPersonal;
     document.getElementById('numero-especialidad-personal').value = especialidadPersonal;
 
+    // Guardar el valor del tipo de documento en sessionStorage
+    sessionStorage.setItem('numeroDocumentoPersonal', numeroDocumentoPersonal);
+    sessionStorage.setItem('nombresCompletoPersonal', nombresCompletoPersonal);
+    sessionStorage.setItem('colegiaturaPersonal', colegiaturaPersonal);
+    sessionStorage.setItem('idProfesion', idProfesion);
+    sessionStorage.setItem('especialidadPersonal', especialidadPersonal);
+    sessionStorage.setItem('numeroEspecialidad', numeroEspecialidad);
 
+    // Ocultar el formulario de búsqueda de personal
     document.getElementById('form-personal').classList.remove('d-none');
     // Limpiar y ocultar resultados
     limpiarOcultar();

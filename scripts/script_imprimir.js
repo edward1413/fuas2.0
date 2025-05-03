@@ -103,6 +103,14 @@ document.getElementById('btn-imprimir').addEventListener('click', function () {
         iframeDocument.getElementById('codigo-cie10').textContent = sessionStorage.getItem('codigoCIE10') || '';
         iframeDocument.getElementById('descripcion-cie10').textContent = sessionStorage.getItem('descripcionCIE10') || '';
 
+        // 👉 DATOS DEL PERSONAL
+        iframeDocument.getElementById('numero-documento-personal').textContent = sessionStorage.getItem('numeroDocumentoPersonal') || '';
+        iframeDocument.getElementById('nombres-completos-personal').textContent = sessionStorage.getItem('nombresCompletoPersonal') || '';
+        iframeDocument.getElementById('colegiatura-personal').textContent = sessionStorage.getItem('colegiaturaPersonal') || '';
+        iframeDocument.getElementById('id-profesion').textContent = sessionStorage.getItem('idProfesion') || '';
+        iframeDocument.getElementById('especialidad-personal').textContent = sessionStorage.getItem('especialidadPersonal') || '';
+        iframeDocument.getElementById('numero-especialidad-personal').textContent = sessionStorage.getItem('numeroEspecialidad') || '';  
+
         // 👉 IMPRIMIR
         iframeWindow.focus();
         iframeWindow.print();
