@@ -153,21 +153,6 @@ body {
     color: #6b85a9 !important;
 }
 
-.site-footer {
-    background-color: #1a2c46;
-    color: #dbe4f1;
-    padding: 20px 0;
-    text-align: center;
-    font-family: 'Roboto', sans-serif;
-    margin-top: 20px;
-}
-
-.footer-content {
-    max-width: 80%;
-    margin: 0 auto;
-    padding: 0 20px;
-}
-
 .social-links a {
     color: #4c9cdb;
     margin: 0 10px;
@@ -179,27 +164,70 @@ body {
     text-decoration: underline;
 }
 
-.site-footer p {
-    margin: 5px 0;
+#resultado-codigo-cie10 {
+    /* Agrega un pequeño margen entre el texto */
+    margin-left: 5px;
+}
+
+#resultado-documento-paciente {
+    /* Agrega un pequeño margen entre el texto */
+    margin-left: 5px;
+}
+
+#resultado-documento-personal {
+    /* Agrega un pequeño margen entre el texto */
+    margin-left: 5px;
+}
+
+/* Agrega esto a tu archivo CSS */
+#btn-imprimir:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.mensaje-impresion {
+    display: none;
+    font-size: 0.9rem;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.mensaje-impresion.visible {
+    display: block;
+    opacity: 1;
+}
+
+#check {
+    margin: 0;
+}
+
+/* Estilos del footer */
+.site-footer {
+    background-color: #081625;
+    color: var(--light-text);
+    padding: 20px 0;
+    text-align: center;
+    margin-top: 20px;
     font-size: 0.8rem;
+    margin: 5px 0;
+}
+
+.footer-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+    max-width: 80%;
+    margin: 0 auto;
+    padding: 0 20px;
 }
 
 .site-footer p strong {
     color: #7bb3e0;
-    font-size: 0.85rem;
 }
 
-#resultado-codigo-cie10 {
-    margin-left: 5px;
-    /* Agrega un pequeño margen entre el texto */
-}
-
-#resultado-documento-paciente {
-    margin-left: 5px;
-    /* Agrega un pequeño margen entre el texto */
-}
-
-#resultado-documento-personal {
-    margin-left: 5px;
-    /* Agrega un pequeño margen entre el texto */
+/* Responsive */
+@media (max-width: 768px) {
+    .footer-content {
+        max-width: 95%;
+    }
 }

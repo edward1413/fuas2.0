@@ -71,6 +71,25 @@ document.getElementById('btn-imprimir').addEventListener('click', function () {
         iframeDocument.getElementById('numero-documento-paciente').textContent = sessionStorage.getItem('numeroDocumentoPaciente') || '';
         iframeDocument.getElementById('numero-historia-clinica').textContent = sessionStorage.getItem('numeroDocumentoPaciente') || '';
 
+
+        function imprimirDatosAsegurado(iframeDocument) {
+            const mostrar = document.getElementById('codigoAfiliado').checked;
+            const codigoAsegurado = iframeDocument.getElementById('codigo-asegurado');
+            const numeroAsegurado = iframeDocument.getElementById('numero-asegurado');
+
+            if (mostrar) {
+                const tipoDoc = sessionStorage.getItem('tipoDocumentoPaciente');
+                codigoAsegurado.textContent = tipoDoc === '1' ? '2' : '3';
+                numeroAsegurado.textContent = sessionStorage.getItem('numeroDocumentoPaciente') || '';
+            } else {
+                codigoAsegurado.textContent = '';
+                numeroAsegurado.textContent = '';
+            }
+        }
+
+        // Llamar la función en tu evento de impresión
+        imprimirDatosAsegurado(iframeDocument);
+
         // Fecha de nacimiento del paciente
         const fechaNacimiento = sessionStorage.getItem('fechaNacimientoPaciente');
         if (fechaNacimiento) {
@@ -97,7 +116,16 @@ document.getElementById('btn-imprimir').addEventListener('click', function () {
         }
 
         // 👉 CÓDIGO DE PRESTACIÓN 
-        iframeDocument.getElementById('prestacion-fua').textContent = sessionStorage.getItem('codigoPrestacion') || '';
+        const codigoPrestacion = sessionStorage.getItem('codigoPrestacion') || '';
+        iframeDocument.getElementById('prestacion-fua').textContent = codigoPrestacion;
+
+        // 👉 MARCAR X SI NO ES 056
+        if (codigoPrestacion !== '056') {
+            const xMark = iframeDocument.getElementById('tipo-cie10');
+            if (xMark) {
+                xMark.textContent = 'X';
+            }
+        }
 
         // 👉 CÓDIGO Y DESCRIPCIÓN DIAGNOSTICO
         iframeDocument.getElementById('codigo-cie10').textContent = sessionStorage.getItem('codigoCIE10') || '';
@@ -109,7 +137,7 @@ document.getElementById('btn-imprimir').addEventListener('click', function () {
         iframeDocument.getElementById('colegiatura-personal').textContent = sessionStorage.getItem('colegiaturaPersonal') || '';
         iframeDocument.getElementById('id-profesion').textContent = sessionStorage.getItem('idProfesion') || '';
         iframeDocument.getElementById('especialidad-personal').textContent = sessionStorage.getItem('especialidadPersonal') || '';
-        iframeDocument.getElementById('numero-especialidad-personal').textContent = sessionStorage.getItem('numeroEspecialidad') || '';  
+        iframeDocument.getElementById('numero-especialidad-personal').textContent = sessionStorage.getItem('numeroEspecialidad') || '';
 
         // 👉 IMPRIMIR
         iframeWindow.focus();

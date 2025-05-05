@@ -1,12 +1,14 @@
 :root {
-    --primary-color: #1cbea9;
-    --primary-dark: #159b8a;
-    --secondary-color: #4a90e2;
-    --dark-bg: #15253a;
-    --darker-bg: #0f151c;
-    --light-text: #e6e6e6;
+    --primary-color: #4c9cdb;
+    --primary-dark: #3a7aad;
+    --secondary-color: #2a3a4d;
+    --dark-bg: #172840;
+    --darker-bg: #081625;
+    --light-text: #dbe4f1;
+    --muted-text: #aabdd6;
     --success-color: #28a745;
     --error-color: #dc3545;
+    --border-color: #2a3a4d;
     --border-radius: 6px;
     --transition: all 0.3s ease;
 }
@@ -18,7 +20,7 @@
 }
 
 body {
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-family: 'Roboto', sans-serif;
     background-color: var(--dark-bg);
     color: var(--light-text);
     line-height: 1.6;
@@ -26,28 +28,33 @@ body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    font-size: 0.85rem;
 }
 
 .container-fluid {
-    max-width: 50%;
+    width: 80%;
     margin: 0 auto;
     padding: 20px;
-    background-color: rgba(15, 21, 28, 0.7);
+    background-color: var(--darker-bg);
     border-radius: var(--border-radius);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    box-shadow:
+        8px 8px 16px rgba(0, 0, 0, 0.4),
+        -8px -8px 16px rgba(76, 156, 219, 0.05);
+    border: 1px solid var(--border-color);
 }
 
 h1 {
     text-align: center;
     color: var(--light-text);
     margin-bottom: 0.5rem;
+    font-size: 1.5rem;
 }
 
 .subtitle {
     text-align: center;
-    color: rgba(230, 230, 230, 0.8);
+    color: var(--muted-text);
     margin-bottom: 2rem;
-    font-size: 0.95rem;
+    font-size: 0.85rem;
 }
 
 .upload-container {
@@ -63,42 +70,49 @@ h1 {
 }
 
 .file-label {
-    font-size: 0.9rem;
-    color: var(--light-text);
+    font-size: 0.85rem;
+    color: var(--muted-text);
     font-weight: 500;
 }
 
 .form-control {
     color: var(--light-text);
-    border: 1px solid var(--secondary-color);
-    background: var(--darker-bg);
+    border: 1px solid var(--border-color);
+    background: #1a2c47;
     border-radius: var(--border-radius);
-    padding: 12px;
-    font-size: 14px;
+    padding: 10px 12px;
+    font-size: 0.85rem;
     width: 100%;
-    transition: var(--transition);
+    transition:
+        background-color 0.3s ease,
+        transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+        box-shadow 0.3s ease;
 }
 
 .form-control:focus {
     border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(28, 190, 169, 0.25);
+    box-shadow: 0 0 0 3px rgba(76, 156, 219, 0.3);
     outline: none;
+    background-color: #1f3254;
 }
 
 .help-text {
-    color: rgba(230, 230, 230, 0.6);
+    color: var(--muted-text);
     font-size: 0.8rem;
 }
 
 .btn-upload {
-    padding: 12px 24px;
+    padding: 10px 24px;
     border: none;
     border-radius: var(--border-radius);
-    background-color: var(--primary-color);
+    background: linear-gradient(135deg, var(--primary-color) 0%, #3a7aad 100%);
     color: white;
     cursor: pointer;
-    transition: var(--transition);
-    font-weight: 600;
+    transition:
+        background-color 0.3s ease,
+        transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+        box-shadow 0.3s ease;
+    font-weight: 500;
     letter-spacing: 0.5px;
     display: inline-flex;
     align-items: center;
@@ -106,6 +120,8 @@ h1 {
     gap: 8px;
     align-self: center;
     min-width: 200px;
+    font-size: 0.85rem;
+    box-shadow: 0 2px 10px rgba(76, 156, 219, 0.4);
 }
 
 .btn-upload:hover {
@@ -123,16 +139,23 @@ h1 {
     cursor: not-allowed;
     transform: none;
     box-shadow: none;
+    opacity: 0.5;
 }
 
 .btn-upload .spinner {
     border: 2px solid rgba(255, 255, 255, 0.3);
     border-top: 2px solid white;
     border-radius: 50%;
-    width: 18px;
-    height: 18px;
+    width: 16px;
+    height: 16px;
     animation: spin 0.7s linear infinite;
     display: none;
+}
+
+.btn-upload:focus,
+.form-control:focus {
+    outline: 2px solid #a4d2ff;
+    outline-offset: 2px;
 }
 
 @keyframes spin {
@@ -149,51 +172,34 @@ h1 {
     font-weight: 500;
     transform: translateY(10px);
     transition: var(--transition);
+    border: 1px solid var(--success-color);
+    color: var(--success-color);
+    background: rgba(26, 44, 71, 0.7);
 }
 
-
+#response.error {
+    color: var(--error-color);
+    background-color: rgba(220, 53, 69, 0.1);
+    border-color: var(--error-color);
+}
 
 #response.show {
     opacity: 1;
     transform: translateY(0);
-}
-
-.success {
-    color: var(--success-color);
-    background-color: rgba(40, 167, 69, 0.1);
-    border: 1px solid var(--success-color);
-}
-
-.error {
-    color: var(--error-color);
-}
-
-/* Responsive */
-@media (max-width: 600px) {
-    .container-fluid {
-        padding: 1.5rem;
-    }
-
-    h1 {
-        font-size: 1.5rem;
-    }
-
-    .btn-upload {
-        width: 100%;
-    }
+    animation: fadeInSlide 0.6s ease-out;
 }
 
 progress {
     appearance: none;
-    height: 18px;
+    height: 12px;
     border: none;
     border-radius: var(--border-radius);
     overflow: hidden;
-    background-color: #2c3e50;
+    background-color: #1a2c47;
 }
 
 progress::-webkit-progress-bar {
-    background-color: #2c3e50;
+    background-color: #1a2c47;
 }
 
 progress::-webkit-progress-value {
@@ -217,65 +223,152 @@ progress::-moz-progress-bar {
     }
 }
 
-#response.show {
-    opacity: 1;
-    transform: translateY(0);
-    animation: fadeInSlide 0.6s ease-out;
+/* Micro-interacciones */
+@keyframes gentlePulse {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(0.98);
+    }
+
+    100% {
+        transform: scale(1);
+    }
 }
 
-/* Estilos generales del footer */
+/* Estilos del footer */
 .site-footer {
-    background-color: #0f151c;
-    /* Mismo color oscuro que las tarjetas */
-    color: #fff;
-    /* Texto blanco */
+    background-color: var(--darker-bg);
+    color: var(--light-text);
     padding: 20px 0;
-    /* Espaciado interno */
     text-align: center;
-    /* Centrar el contenido */
-    font-family: Arial, sans-serif;
     margin-top: 20px;
-    /* Espacio superior para separarlo del contenido */
+    font-size: 0.8rem;
+    margin: 5px 0;
 }
 
 .footer-content {
-    max-width: 70%;
-    /* Ancho máximo igual al contenedor principal */
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+    max-width: 80%;
     margin: 0 auto;
-    /* Centrar horizontalmente */
     padding: 0 20px;
-    /* Espaciado lateral */
 }
 
 .social-links a {
-    color: #28a745;
-    /* Color verde como en el botón de imprimir */
+    color: var(--primary-color);
     margin: 0 10px;
-    /* Espacio entre los enlaces */
     text-decoration: none;
-    /* Quitar subrayado */
-    font-size: 0.9rem;
-    /* Tamaño de fuente más pequeño */
+    font-size: 0.8rem;
 }
 
 .social-links a:hover {
     text-decoration: underline;
-    /* Subrayado al pasar el mouse */
-}
-
-.site-footer p {
-    margin: 5px 0;
-    /* Espaciado entre párrafos */
-    font-size: 0.9rem;
-    /* Tamaño de fuente más pequeño */
-}
-
-.site-footer p {
-    margin: 5px 0;
-    font-size: 0.9rem;
 }
 
 .site-footer p strong {
-    color: #28a745;
-    /* Color verde para resaltar los títulos */
+    color: #7bb3e0;
+}
+
+::placeholder {
+    color: #7a90b7 !important;
+    opacity: 1 !important;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .container-fluid {
+        width: 95%;
+        padding: 1.5rem;
+    }
+
+    h1 {
+        font-size: 1.3rem;
+    }
+
+    .btn-upload {
+        width: 100%;
+    }
+
+    .footer-content {
+        max-width: 95%;
+    }
+}
+
+/* Añadir esto al final de tu CSS */
+
+/* Efecto pulsación al hacer clic */
+@keyframes gentlePulse {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(0.98);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+.btn-upload:active {
+    animation: gentlePulse 0.3s ease;
+}
+
+/* Mejor feedback para file input */
+.form-control[type="file"] {
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+}
+
+.form-control[type="file"]:hover {
+    border-color: var(--primary-color);
+}
+
+/* Spinner mejorado */
+.btn-upload .spinner {
+    border-top-color: #a4d2ff;
+    filter: drop-shadow(0 0 2px rgba(164, 210, 255, 0.5));
+}
+
+/* Mobile mejorado */
+@media (max-width: 480px) {
+    .btn-upload {
+        padding: 12px 5vw;
+        min-height: 44px;
+    }
+
+    .form-control {
+        padding: 12px;
+    }
+}
+
+/* Añadir a tu CSS */
+.drag-drop-area {
+    border: 2px dashed var(--border-color);
+    border-radius: var(--border-radius);
+    padding: 2rem;
+    text-align: center;
+    transition: all 0.3s ease;
+    margin-bottom: 1rem;
+}
+
+.drag-drop-area.highlight {
+    border-color: var(--primary-color);
+    background-color: rgba(76, 156, 219, 0.05);
+}
+
+.help-section {
+    margin-top: 2rem;
+    border-top: 1px solid var(--border-color);
+    padding-top: 1rem;
+}
+
+#uploadProgress.processing {
+     /* Ej: #ffc107 (amarillo) */
+    background-color: var(--processing-color);
 }

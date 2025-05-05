@@ -35,7 +35,15 @@
 
                 <div id="form-paciente" class="card card-dark mb-3 d-none">
                     <div class="card-body compact-form">
-                        <h2 class="section-title">DATOS DEL USUARIO</h2>
+                        <div class="row g-2">
+                            <div class="col-lg-8">
+                                <h2 class="section-title">DATOS DEL PACIENTE</h2>
+                            </div>
+                            <div class="col-lg-4 d-flex">
+                                <input id="codigoAfiliado" class="form-check-input me-2" type="checkbox">
+                                <label class="form-check-label" for="codigoAfiliado">CÓDIGO DE AFILIADO</label>
+                            </div>
+                        </div>
                         <div class="row g-2">
                             <div class="col-md-4">
                                 <label class="form-label">Nombres</label>
@@ -195,28 +203,44 @@
 
         <!-- Botón de imprimir -->
         <div class="text-center mt-4">
-            <button id="btn-imprimir" type="button" class="btn btn-print">
+            <button id="btn-imprimir" type="button" class="btn btn-print" disabled>
                 <i class="bi bi-printer-fill me-2"></i>IMPRIMIR
             </button>
         </div>
+        <div class="text-center mt-4">
+            <small id="mensaje-impresion" class="text-danger mensaje-impresion">
+                <i class="fas fa-lock me-2"></i>Complete los datos del paciente y del personal que atiende.
+            </small>
+
+        </div>
     </div>
-    <div class="container-fluid">
-        <footer class="site-footer">
-            <div class="footer-content">
-                <p><strong>Edward Rivera Moreno</strong> - Ingeniero de Sistemas</p>
-                <p>Centro de Salud Mental Comunitario Dos de Junio</p>
-                <p>
-                    <i class="bi bi-telephone-fill" style="color: #28a745;"></i> <strong>Fijo:</strong> (043) 700697
-                    <!-- <i class="bi bi-phone-fill" style="color: #28a745;"></i> <strong> | Móvil:</strong> +51 987-654-321-->
-                </p>
-                <div class="social-links">
-                    <a href="https://www.facebook.com/profile.php?id=100069548143051" target="_blank"><i
-                            class="bi bi-facebook"></i> Facebook CSMC DOS DE JUNIO</a>
-                </div>
-                <p>&copy; 2025 Todos los derechos reservados.</p>
+
+    <footer class="site-footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <img src="imagenes/favicon.png" alt="Logo CSMC" width="40">
+                <p><strong>Centro de Salud Mental Comunitario<br>Dos de Junio</p></strong>
             </div>
-        </footer>
-    </div>
+
+            <div class="footer-contact">
+                <p><i class="bi bi-geo-alt-fill"></i> Av. Los Incas Mz. I - Lt. 2, Chimbote</p>
+                <p><i class="bi bi-telephone-fill"></i> <strong>Fijo:</strong> (043) 700697</p>
+                <p><i class="bi bi-envelope-fill"></i> csmcdosdejunio2020@gmail.com</p>
+            </div>
+
+            <div class="footer-social">
+                <a href="https://www.facebook.com/profile.php?id=100069548143051" target="_blank"
+                    aria-label="Facebook CSMC"><i class="bi bi-facebook"></i> Facebook CSMC DOS DE JUNIO
+                </a>
+            </div>
+
+            <div class="footer-legal">
+                <p>&copy; 2025 CSMC Dos de Junio. Todos los derechos reservados.</p>
+                <p><small>v2.1.0 | Última actualización: Mayo 2025</small></p>
+                <p>Ingeniero de sistemas - Edward Rivera Moreno</p>
+            </div>
+        </div>
+    </footer>
 
     <!-- Bootstrap 5 JS  para el Bundle con el Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>

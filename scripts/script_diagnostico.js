@@ -80,30 +80,63 @@ document.addEventListener('DOMContentLoaded', function () {
         seleccionarCIE10(item);  // Llamamos a la función para seleccionar el diagnóstico
     });
 
-    // Manejar presionar Enter en el campo de código CIE-10
-    document.getElementById('codigo-cie10').addEventListener('keydown', function (e) {
-        if (e.key === 'Enter') {
-            const codigo = this.value.trim();
-            if (codigo.length >= 4) {
-                fetch(`buscar/buscar_cie10.php?codigoCIE10=${encodeURIComponent(codigo)}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        const descripcionCIE10 = document.getElementById('descripcion-cie10');
-                        if (data.success) {
-                            descripcionCIE10.value = data.descripcion_cie10;
-                            sessionStorage.setItem('codigoCIE10', codigo);
-                            sessionStorage.setItem('descripcionCIE10', data.descripcion_cie10);
-                        } else {
-                            // Mostrar mensaje en el campo de descripción si no se encuentra el código
-                            descripcionCIE10.value = 'Diagnóstico no encontrado';
-                        }
-                    })
-                    .catch(error => {
-                        console.error("Error:", error);
-                        // Opcional: mostrar un mensaje de error en otro lugar del formulario
-                        document.getElementById('descripcion-cie10').value = 'Error al buscar el diagnóstico';
-                    });
-            }
+    // Obtener los elementos una sola vez
+    const codigoCIE10 = document.getElementById('codigo-cie10');
+    const descripcionCIE10 = document.getElementById('descripcion-cie10');
+
+    // Función para limpiar los datos CIE10 (nueva función añadida)
+    function limpiarDatosCIE10() {
+        descripcionCIE10.value = '';
+        sessionStorage.removeItem('codigoCIE10');
+        sessionStorage.removeItem('descripcionCIE10'); // Añadido para limpiar también la descripción
+    }
+
+    // Función para buscar la prestación (modificada)
+    function buscarDiagnostico(codigo) {
+        codigo = codigo.trim(); // Añadimos trim() para limpiar espacios
+        if (codigo.length >= 4) { // Cambiamos a >=4 para consistencia
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', 'buscar/buscar_cie10.php?codigoCIE10=' + encodeURIComponent(codigo), true);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    var response = JSON.parse(xhr.responseText);
+                    if (response.success) {
+                        descripcionCIE10.value = response.descripcion_cie10;
+                        // Guardamos ambos valores en sessionStorage
+                        sessionStorage.setItem('codigoCIE10', codigo);
+                        sessionStorage.setItem('descripcionCIE10', response.descripcion_cie10);
+                    } else {
+                        descripcionCIE10.value = 'Código no encontrado';
+                        limpiarDatosCIE10(); // Usamos la función centralizada
+                    }
+                }
+            };
+            xhr.send();
+        } else {
+            limpiarDatosCIE10(); // Usamos la función centralizada
+        }
+    }
+
+    // Evento para Enter (como lo tenías)
+    codigoCIE10.addEventListener('keydown', function (event) {
+        if (event.key === 'Enter') {
+            buscarDiagnostico(this.value);
+        }
+    });
+
+    // Nuevo evento para detectar cuando se borra el contenido
+    codigoCIE10.addEventListener('input', function () {
+        if (this.value.length === 0) {
+            limpiarDatosCIE10(); // Usamos la función centralizada para limpiar
+        } else if (this.value.length < 4) {
+            descripcionCIE10.value = ''; // Limpia visualmente pero mantiene datos si había algo antes
+        }
+    });
+
+    // También puedes agregar el evento 'change' por si acaso
+    codigoCIE10.addEventListener('change', function () {
+        if (this.value.length === 0) {
+            limpiarDatosCIE10(); // Usamos la función centralizada para limpiar
         }
     });
 });

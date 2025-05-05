@@ -109,24 +109,22 @@ try {
     fclose($handle);
     $conexion->commit();
 
-    // Respuesta HTML
-    $reporte = "<div id='response' class='show success'>";
-    $reporte .= "<h3>Resultado de la importación</h3>";
-    $reporte .= "<p><strong>Registros insertados correctamente:</strong> $registrosInsertados</p>";
+    // Prepara los datos para la respuesta (en formato JSON)
+    $response = [
+        'success' => true,
+        'message' => '¡Importación completada con éxito!',
+        'inserted' => $registrosInsertados,
+        'errors' => $errores
+    ];
 
-    if ($errores > 0) {
-        $reporte .= "<p><strong>Registros con errores:</strong> $errores</p>";
-    }
-
-    $reporte .= "<p>¡Importación completada con éxito!</p>";
-    $reporte .= "</div>";
-
-    echo $reporte;
+    header('Content-Type: application/json'); // Cambia el content-type a JSON
+    echo json_encode($response); // Envía los datos como JSON
 
 } catch (Exception $e) {
     $conexion->rollback();
-    echo "<div id='response' class='show error'>Error en la importación: " . htmlspecialchars($e->getMessage()) . "</div>";
-} finally {
-    $conexion->close();
+    header('Content-Type: application/json');
+    echo json_encode([
+        'success' => false,
+        'message' => 'Error en la importación: ' . $e->getMessage()
+    ]);
 }
-?>

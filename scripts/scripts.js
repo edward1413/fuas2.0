@@ -1,40 +1,43 @@
 import { convertirAMayusculas } from './funciones.js';
-// Espera a que el contenido del DOM (estructura HTML) se cargue completamente
-// antes de ejecutar el código dentro de la función.
-document.addEventListener('DOMContentLoaded', function () {
-    ////////////////////////////
-    /// JS PARA DIAGNOSTICOS ///
-    ////////////////////////////
-    // Obtiene una referencia al elemento del DOM con el ID "codigo-cie10"
-    // y lo almacena en la variable codigoCIE10.
-    var codigoCIE10 = document.getElementById('codigo-cie10');
-    // Agrega un evento 'input' al campo de entrada. Este evento se dispara cada vez 
-    // que el valor del campo cambia (por ejemplo, cuando el usuario escribe o pega texto).
-    codigoCIE10.addEventListener('input', function () {
-        // Limita la longitud del texto ingresado a un máximo de 4 caracteres.
-        // Si el usuario intenta ingresar más de 4, solo se mantienen los primeros 4.
-        if (this.value.length > 4) {
-            this.value = this.value.slice(0, 4); // Corta el texto hasta el carácter 4
-        }
-        // Si ya tiene 3 dígitos, disparar automáticamente el evento "Enter"
-        if (this.value.length === 4) {
-            // Crear un evento de teclado simulando "Enter"
-            var enterEvent = new KeyboardEvent('keydown', {  // Crear un nuevo evento de teclado
-                // Definir el tipo de evento como 'keydown' (tecla presionada hacia abajo)
-                key: 'Enter', // Especificar la tecla como 'Enter'
-                keyCode: 13, // Código de la tecla 'Enter'
-                which: 13, // Código de la tecla 'Enter' (deprecated, pero a veces usado)
-                bubbles: true // Permitir que el evento burbujee (propague) hacia arriba en el DOM
-            });
 
-            // Disparar el evento en el campo
-            this.dispatchEvent(enterEvent);
+// Único DOMContentLoaded
+document.addEventListener('DOMContentLoaded', function () {
+    // 1. LIMPIEZA INICIAL
+    sessionStorage.removeItem('codigoCIE10');
+    sessionStorage.removeItem('descripcionCIE10');
+    sessionStorage.removeItem('codigoPrestacion');
+
+    // 2. DESHABILITAR CAMPOS (solo aquí)
+    const codigoCIE10 = document.getElementById('codigo-cie10');
+    const descripcionCIE10 = document.getElementById('descripcion-cie10');
+    const buscarCIE10 = document.getElementById('buscar-cie10');
+
+    codigoCIE10.disabled = true;
+    descripcionCIE10.disabled = true;
+    buscarCIE10.disabled = true;
+
+    // 3. CONVERSIÓN A MAYÚSCULAS
+    convertirAMayusculas('buscar-paciente');
+    convertirAMayusculas('buscar-personal');
+    convertirAMayusculas('buscar-cie10');
+    convertirAMayusculas('codigo-cie10');
+
+    // 4. LÓGICA DE DIAGNÓSTICOS
+    codigoCIE10.addEventListener('input', function () {
+        if (this.value.length > 4) this.value = this.value.slice(0, 4);
+        if (this.value.length === 4) {
+            this.dispatchEvent(new KeyboardEvent('keydown', {
+                key: 'Enter', keyCode: 13, bubbles: true
+            }));
+        }
+        if (this.value.length === 0) {
+            descripcionCIE10.value = '';
+            sessionStorage.removeItem('codigoCIE10');
+            sessionStorage.removeItem('descripcionCIE10');
         }
     });
 
-    ///////////////////////////
-    //// JS PARA PRESTACION ///
-    ///////////////////////////
+    // 5. LÓGICA DE PRESTACIÓN
     //creamos una variable para almacenar lo que se escribirá en codigo-prestacion del index.php, y que solo se ingrese 3 números
     var codigoPrestacion = document.getElementById('codigo-prestacion');
     //agregamos un input al campo de la entrada
@@ -64,6 +67,7 @@ document.addEventListener('DOMContentLoaded', function () {
     })
 });
 
+// 7. EVENTOS GLOBALES (fuera de DOMContentLoaded)
 // Escuchar cambios en el switch
 document.getElementById('switchcie10').addEventListener('change', function () {
     const codigoCIE10 = document.getElementById('codigo-cie10');
@@ -80,11 +84,13 @@ document.getElementById('switchcie10').addEventListener('change', function () {
         mensajeDeshabilitado.style.display = 'none';
         mensajeHabilitado.style.display = 'inline';
     } else {
-        codigoCIE10.value = '';
-        descripcionCIE10.value = '';
-        buscarCIE10.value = '';
+        codigoCIE10.value = ''; // Limpiar el campo de código CIE10
+        sessionStorage.removeItem('codigoCIE10'); // Limpiar el valor almacenado en sessionStorage
+        descripcionCIE10.value = ''; // Limpiar el campo de descripción CIE10
+        sessionStorage.removeItem('descripcionCIE10'); // Limpiar el valor almacenado en sessionStorage
+        buscarCIE10.value = ''; // Limpiar el campo de búsqueda CIE10
 
-        codigoCIE10.disabled = true;
+        codigoCIE10.disabled = true; // Deshabilitar el campo de código CIE10
         descripcionCIE10.disabled = true;
         buscarCIE10.disabled = true;
 
@@ -93,14 +99,3 @@ document.getElementById('switchcie10').addEventListener('change', function () {
     }
 
 });
-
-// Deshabilitar los campos al cargar la página
-document.getElementById('codigo-cie10').disabled = true;
-document.getElementById('descripcion-cie10').disabled = true;
-document.getElementById('buscar-cie10').disabled = true;
-
-// Aplica la función al id del index.php
-convertirAMayusculas('buscar-paciente');
-convertirAMayusculas('buscar-personal');
-convertirAMayusculas('buscar-cie10');
-convertirAMayusculas('codigo-cie10');

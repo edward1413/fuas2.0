@@ -1,4 +1,4 @@
-document.getElementById('uploadForm').addEventListener('submit', function (e) {
+document.getElementById('uploadForm').addEventListener('submit', async function (e) {
     e.preventDefault();
 
     const form = this;
@@ -10,50 +10,199 @@ document.getElementById('uploadForm').addEventListener('submit', function (e) {
     const progressBar = document.getElementById('uploadProgress');
     const uploadStatus = document.getElementById('uploadStatus');
 
-    // Reset
+    // Reset UI
     spinner.style.display = 'inline-block';
     btnText.textContent = 'SUBIENDO...';
     button.disabled = true;
-    responseDiv.innerHTML = '';
+    responseDiv.textContent = '';
     responseDiv.className = '';
     progressBar.style.display = 'block';
     progressBar.value = 0;
     uploadStatus.textContent = '';
 
-    const xhr = new XMLHttpRequest();
+    try {
+        const xhr = new XMLHttpRequest();
 
-    xhr.upload.addEventListener('progress', function (e) {
-        if (e.lengthComputable) {
-            const percent = Math.round((e.loaded / e.total) * 100);
-            progressBar.value = percent;
-            uploadStatus.textContent = `Subiendo archivo... ${percent}%`;
-        }
-    });
+        // Configurar eventos de progreso
+        xhr.upload.addEventListener('progress', (e) => {
+            if (e.lengthComputable) {
+                const percent = Math.round((e.loaded / e.total) * 100);
+                progressBar.value = percent;
+                uploadStatus.textContent = `Subiendo archivo... ${percent}%`;
 
-    xhr.upload.onload = function () {
-        // Subida completa, ahora el servidor está procesando
-        btnText.textContent = 'PROCESANDO...';
-        uploadStatus.textContent = 'Archivo subido. Procesando datos...';
-    };
+                // Animación suave de la barra
+                progressBar.style.transition = 'width 0.3s ease';
+            }
+        });
 
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState === XMLHttpRequest.DONE) {
-            spinner.style.display = 'none';
-            btnText.textContent = 'SUBIR ARCHIVO';
-            button.disabled = false;
-            progressBar.style.display = 'none';
-            uploadStatus.textContent = '';
+        xhr.upload.onload = () => {
+            btnText.textContent = 'PROCESANDO...';
+            uploadStatus.textContent = 'Archivo subido. Procesando datos...';
+            
+            // Barra de progreso al 100% (subida completada)
+            progressBar.value = 100;
+            progressBar.style.transition = 'none'; // Elimina animación para el último paso
+            
+            // Opcional: Cambiar color de la barra para "procesamiento"
+            progressBar.classList.add('processing');
+        };
 
-            if (xhr.status === 200) {
-                responseDiv.innerHTML = xhr.responseText;
-                responseDiv.className = xhr.responseText.includes("Importación completada") ? 'show success' : 'show error';
+        // Manejar respuesta
+        xhr.onreadystatechange = () => {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                resetUI();
+
+                if (xhr.status === 200) {
+                    handleSuccessResponse(xhr);
+                } else {
+                    handleErrorResponse(xhr);
+                }
+            }
+        };
+
+        xhr.open('POST', 'procesar_csv.php', true);
+        xhr.timeout = 60000; // 1 minuto timeout
+        xhr.send(formData);
+
+    } catch (error) {
+        console.error('Error:', error);
+        handleNetworkError();
+    }
+
+    function resetUI() {
+        spinner.style.display = 'none';
+        btnText.textContent = 'SUBIR ARCHIVO';
+        button.disabled = false;
+        progressBar.style.display = 'none';
+        uploadStatus.textContent = '';
+    }
+
+    function handleSuccessResponse(xhr) {
+        try {
+            const response = JSON.parse(xhr.responseText);
+
+            if (response.success) {
+                // Construye el mensaje de éxito dinámicamente
+                let successHTML = `
+                    <h3>Resultado de la importación</h3>
+                    <p><strong>Registros insertados:</strong> ${response.inserted}</p>
+                `;
+
+                if (response.errors > 0) {
+                    successHTML += `<p><strong>Registros con errores:</strong> ${response.errors}</p>`;
+                }
+
+                successHTML += `<p>${response.message}</p>`;
+
+                responseDiv.innerHTML = successHTML;
+                responseDiv.className = 'show success';
+                form.reset();
+                document.querySelector('.file-label').textContent = 'Seleccionar archivo CSV';
             } else {
-                responseDiv.innerHTML = "Error al subir el archivo. Por favor intente nuevamente.";
+                // Manejo de errores del servidor (ej: validación fallida)
+                responseDiv.textContent = response.message;
                 responseDiv.className = 'show error';
             }
+        } catch (e) {
+            // Fallback para respuestas no JSON (por compatibilidad)
+            console.error("Error parsing JSON:", e);
+            const isSuccess = xhr.responseText.includes("Importación completada");
+            responseDiv.innerHTML = xhr.responseText;
+            responseDiv.className = isSuccess ? 'show success' : 'show error';
         }
-    };
+    }
 
-    xhr.open('POST', 'procesar_csv.php');
-    xhr.send(formData);
+    function handleErrorResponse(xhr) {
+        const errorMsg = xhr.status === 0 ?
+            'Error de conexión. Verifique su red.' :
+            `Error ${xhr.status}: ${xhr.statusText}`;
+
+        responseDiv.textContent = errorMsg;
+        responseDiv.className = 'show error';
+    }
+
+    function handleNetworkError() {
+        responseDiv.textContent = 'Error de red. Por favor intente nuevamente.';
+        responseDiv.className = 'show error';
+        resetUI();
+    }
 });
+
+// Manejo mejorado de selección de archivos
+document.getElementById('inputGroupFile04').addEventListener('change', function (e) {
+    const fileInput = this;
+    const fileLabel = document.querySelector('.file-label');
+
+    if (fileInput.files.length > 0) {
+        const file = fileInput.files[0];
+
+        // Validación básica de archivo
+        if (file.size > 5 * 1024 * 1024) { // 5MB
+            fileLabel.textContent = 'Archivo demasiado grande (máx. 5MB)';
+            fileLabel.style.color = 'var(--error-color)';
+            fileInput.value = '';
+            return;
+        }
+
+        if (!file.name.endsWith('.csv')) {
+            fileLabel.textContent = 'Solo se aceptan archivos CSV';
+            fileLabel.style.color = 'var(--error-color)';
+            fileInput.value = '';
+            return;
+        }
+
+        fileLabel.innerHTML = `📄 ${file.name}`;
+        fileLabel.style.color = 'var(--primary-color)';
+    } else {
+        fileLabel.textContent = 'Seleccionar archivo CSV';
+        fileLabel.style.color = 'var(--muted-text)';
+    }
+});
+
+// Implementar drag & drop
+const dropZone = document.getElementById('dropZone');
+const fileInput = document.getElementById('inputGroupFile04');
+const fileName = document.getElementById('fileName');
+
+['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+    dropZone.addEventListener(eventName, preventDefaults, false);
+});
+
+function preventDefaults(e) {
+    e.preventDefault();
+    e.stopPropagation();
+}
+
+['dragenter', 'dragover'].forEach(eventName => {
+    dropZone.addEventListener(eventName, highlight, false);
+});
+
+['dragleave', 'drop'].forEach(eventName => {
+    dropZone.addEventListener(eventName, unhighlight, false);
+});
+
+function highlight() {
+    dropZone.classList.add('highlight');
+}
+
+function unhighlight() {
+    dropZone.classList.remove('highlight');
+}
+
+dropZone.addEventListener('drop', handleDrop, false);
+
+function handleDrop(e) {
+    const dt = e.dataTransfer;
+    const files = dt.files;
+
+    if (files.length) {
+        fileInput.files = files;
+        updateFileName();
+    }
+}
+
+function updateFileName() {
+    if (fileInput.files.length) {
+        fileName.textContent = fileInput.files[0].name;
+    }
+}

@@ -28,7 +28,7 @@ if (!defined('DB_PASS')) {
 }
 
 if (!defined('DB_NAME')) {
-    define('DB_NAME', 'fuas_csmcddj');
+    define('DB_NAME', 'impresion_fuas');
 }
 
 // =============================

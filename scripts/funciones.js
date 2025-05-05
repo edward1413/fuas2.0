@@ -25,15 +25,23 @@ export function seleccionarCIE10(item) {
     document.getElementById('codigo-cie10').value = codigoCIE10;
     document.getElementById('descripcion-cie10').value = descripcionCIE10;
 
-    // Guardar el valor del tipo de documento en sessionStorage
-    sessionStorage.setItem('codigoCIE10', codigoCIE10);
-    sessionStorage.setItem('descripcionCIE10', descripcionCIE10);
+    /// Solo guardar en sessionStorage si hay valores
+    if (codigoCIE10.trim() !== '') {
+        sessionStorage.setItem('codigoCIE10', codigoCIE10);
+        sessionStorage.setItem('descripcionCIE10', descripcionCIE10);
+    } else {
+        sessionStorage.removeItem('codigoCIE10');
+        sessionStorage.removeItem('descripcionCIE10');
+    }
 
     // Llama a la función para limpiar y ocultar resultados
     limpiarOcultar();
 }
 
 export function seleccionarPaciente(item) {
+    // Limpiar primero (por si acaso hay datos previos)
+    limpiarDatosPaciente();
+
     // Extraer los datos del atributo `data-*`
     const tipoDocumentoPaciente = item.getAttribute('data-tipo-documento-paciente');
     const numeroDocumentoPaciente = item.getAttribute('data-dni-paciente');
@@ -53,14 +61,13 @@ export function seleccionarPaciente(item) {
 
     // Guardar el valor del tipo de documento en sessionStorage
     sessionStorage.setItem('tipoDocumentoPaciente', tipoDocumentoPaciente);
-    sessionStorage.setItem('numeroDocumentoPaciente', numeroDocumentoPaciente); 
+    sessionStorage.setItem('numeroDocumentoPaciente', numeroDocumentoPaciente);
     sessionStorage.setItem('primerNombrePaciente', nombresSeparados[0]);
     sessionStorage.setItem('otrosNombresPaciente', nombresSeparados.slice(1).join(' '));
     sessionStorage.setItem('apellidoPaternoPaciente', apellidoPaternoPaciente);
     sessionStorage.setItem('apellidoMaternoPaciente', apellidoMaternoPaciente);
     sessionStorage.setItem('fechaNacimientoPaciente', fechaNacimientoPaciente);
     sessionStorage.setItem('generoPaciente', generoPaciente);
-
 
     // Calcular y asignar la edad (opcional)
     if (fechaNacimientoPaciente) {
@@ -69,8 +76,27 @@ export function seleccionarPaciente(item) {
     }
 
     document.getElementById('form-paciente').classList.remove('d-none');
-    // Limpiar y ocultar resultados
     limpiarOcultar();
+}
+
+export function limpiarDatosPaciente() {
+    // Limpiar campos del formulario
+    document.getElementById('documento-paciente').value = '';
+    document.getElementById('nombres-paciente').value = '';
+    document.getElementById('apellido-paterno-paciente').value = '';
+    document.getElementById('apellido-materno-paciente').value = '';
+    document.getElementById('fecha-nacimiento-paciente').value = '';
+    document.getElementById('edad-paciente').value = '';
+
+    // Limpiar sessionStorage
+    sessionStorage.removeItem('tipoDocumentoPaciente');
+    sessionStorage.removeItem('numeroDocumentoPaciente');
+    sessionStorage.removeItem('primerNombrePaciente');
+    sessionStorage.removeItem('otrosNombresPaciente');
+    sessionStorage.removeItem('apellidoPaternoPaciente');
+    sessionStorage.removeItem('apellidoMaternoPaciente');
+    sessionStorage.removeItem('fechaNacimientoPaciente');
+    sessionStorage.removeItem('generoPaciente');
 }
 
 // Función para calcular la edad a partir de la fecha de nacimiento
@@ -123,6 +149,24 @@ export function seleccionarPersonal(item) {
     document.getElementById('form-personal').classList.remove('d-none');
     // Limpiar y ocultar resultados
     limpiarOcultar();
+
+    // 👇 Mapeo de idProfesion a códigos
+    const profesionCodigos = {
+        "1": "056",
+        "6": "061",
+        "8": "906",
+        "9": "200"
+    };
+
+    // 👇 Lógica corregida para buscar prestación
+    if (profesionCodigos.hasOwnProperty(idProfesion)) {
+        const codigoIdProfesion = profesionCodigos[idProfesion];
+        const codigoPrestacionInput = document.getElementById('codigo-prestacion');
+
+        // Asignar valor y disparar búsqueda
+        codigoPrestacionInput.value = codigoIdProfesion;
+        buscarPrestacion(codigoIdProfesion); // Esto asume que buscarPrestacion() está definida/importada
+    }
 }
 
 
@@ -159,3 +203,55 @@ export function debounce(func, delay) {
         timeout = setTimeout(() => func.apply(this, args), delay);
     };
 }
+
+// Agrega esto donde manejas el evento de borrado (input o keydown)
+export function limpiarDatosCIE10() {
+    document.getElementById('descripcion-cie10').value = '';
+    sessionStorage.removeItem('codigoCIE10');
+    sessionStorage.removeItem('descripcionCIE10');
+}
+
+// Ejemplo de uso en evento input:
+document.getElementById('codigo-cie10').addEventListener('input', function () {
+    if (this.value.trim() === '') {
+        limpiarDatosCIE10();
+    }
+});
+
+// Función para verificar el estado de los formularios
+export function actualizarEstadoBotonImprimir() {
+    const formPaciente = document.getElementById('form-paciente');
+    const formPersonal = document.getElementById('form-personal');
+    const btnImprimir = document.getElementById('btn-imprimir');
+    const mensajeImpresion = document.getElementById('mensaje-impresion');
+
+    // Verificar si ambos formularios están visibles
+    const ambosVisibles = !formPaciente.classList.contains('d-none') &&
+                            !formPersonal.classList.contains('d-none');
+
+    // Habilitar/deshabilitar botón
+    btnImprimir.disabled = !ambosVisibles;
+
+    // Ocultar mensaje cuando ambos formularios son visibles, mostrarlo en caso contrario
+    mensajeImpresion.classList.toggle('visible', !ambosVisibles);
+}
+
+// Observar cambios en los formularios
+const observer = new MutationObserver(actualizarEstadoBotonImprimir);
+
+// Configurar qué observar
+const config = { attributes: true, attributeFilter: ['class'] };
+
+// Comenzar a observar ambos formularios
+observer.observe(document.getElementById('form-paciente'), config);
+observer.observe(document.getElementById('form-personal'), config);
+
+// Ejecutar al cargar la página
+document.addEventListener('DOMContentLoaded', function () {
+    actualizarEstadoBotonImprimir();
+
+    // También puedes llamar a esta función cuando:
+    // - Selecciones un paciente
+    // - Selecciones personal
+    // - Cierres formularios
+});
