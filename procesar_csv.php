@@ -1,50 +1,86 @@
 <?php
-set_time_limit(0); // Sin límite de tiempo
-ini_set('memory_limit', '512M'); // Aumenta límite de memoria si es necesario
-
+set_time_limit(0);
+ini_set('memory_limit', '512M');
 include 'conexion.php';
-header('Content-Type: text/html; charset=utf-8');
+header('Content-Type: application/json; charset=utf-8');
+
+$registrosInsertados = 0; // Inicializar contador de registros insertados
+$errores = 0;            // Inicializar contador de errores
+
+if (!class_exists('ZipArchive')) {
+    echo json_encode(['success' => false, 'message' => 'El servidor no soporta ZIP']);
+    exit;
+}
 
 if ($_SERVER['REQUEST_METHOD'] != 'POST') {
-    die("<div class='error'>Método no permitido</div>");
+    echo json_encode(['success' => false, 'message' => 'Método no permitido']);
+    exit;
 }
 
 if (!isset($_FILES['file'])) {
-    die("<div class='error'>No se ha subido ningún archivo</div>");
+    echo json_encode(['success' => false, 'message' => 'No se ha subido ningún archivo']);
+    exit;
 }
 
-$maxFileSize = 5 * 1024 * 1024; // 5MB
-$expectedColumns = 21;
-$tableName = "maestro_paciente";
-$allowedMimeTypes = ['text/csv', 'text/plain', 'application/csv', 'application/vnd.ms-excel'];
+$maxFileSize = 10 * 1024 * 1024; // 10MB
+$allowedExtensions = ['zip', 'csv'];
 
-if ($_FILES['file']['error'] !== UPLOAD_ERR_OK) {
-    die("<div class='error'>Error al subir el archivo: " . $_FILES['file']['error'] . "</div>");
+// Validar tipo de archivo
+$fileExtension = strtolower(pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION));
+if (!in_array($fileExtension, $allowedExtensions)) {
+    echo json_encode(['success' => false, 'message' => 'Solo se aceptan archivos ZIP o CSV']);
+    exit;
 }
 
 if ($_FILES['file']['size'] > $maxFileSize) {
-    die("<div class='error'>El archivo excede el tamaño máximo permitido de 5MB</div>");
-}
-
-if (!in_array($_FILES['file']['type'], $allowedMimeTypes)) {
-    die("<div class='error'>Tipo de archivo no permitido. Solo se aceptan archivos CSV</div>");
+    echo json_encode(['success' => false, 'message' => 'El archivo excede el tamaño máximo (10MB)']);
+    exit;
 }
 
 $file = $_FILES['file']['tmp_name'];
-$registrosInsertados = 0;
-$errores = 0;
-$batchSize = 1000;
+$csvFile = null;
 
-$conexion->begin_transaction();
-
-try {
-    // Vaciar tabla
-    if (!$conexion->query("TRUNCATE TABLE $tableName")) {
-        throw new Exception("Error al vaciar la tabla: " . $conexion->error);
+// Si es un ZIP, extraer el CSV
+if ($fileExtension === 'zip') {
+    $zip = new ZipArchive;
+    if ($zip->open($file) === true) {
+        // Buscar un archivo CSV dentro del ZIP
+        for ($i = 0; $i < $zip->numFiles; $i++) {
+            $filename = $zip->getNameIndex($i);
+            if (pathinfo($filename, PATHINFO_EXTENSION) === 'csv') {
+                $csvFile = sys_get_temp_dir() . '/' . basename($filename);
+                $zip->extractTo(sys_get_temp_dir(), $filename);
+                break;
+            }
+        }
+        $zip->close();
+    } else {
+        echo json_encode(['success' => false, 'message' => 'No se pudo abrir el archivo ZIP']);
+        exit;
     }
 
-    if (($handle = fopen($file, "r")) === FALSE) {
-        throw new Exception("Error al abrir el archivo");
+    if (!$csvFile) {
+        echo json_encode(['success' => false, 'message' => 'No se encontró ningún CSV dentro del ZIP']);
+        exit;
+    }
+} else {
+    $csvFile = $file; // Si ya es CSV, usarlo directamente
+}
+
+// Ahora procesas el CSV como antes...
+try {
+    $conexion->begin_transaction();
+    $maxFileSize = 10 * 1024 * 1024; // 10MB
+    $expectedColumns = 21; // Número de columnas esperadas en el CSV
+    $tableName = "maestro_paciente";
+    $batchSize = 1000; // <- Añade esta línea
+
+    if (!$conexion->query("TRUNCATE TABLE $tableName")) {
+        throw new Exception("Error al vaciar la tabla");
+    }
+
+    if (($handle = fopen($csvFile, "r")) === false) {
+        throw new Exception("Error al abrir el CSV");
     }
 
     // Saltar encabezado
@@ -110,21 +146,19 @@ try {
     $conexion->commit();
 
     // Prepara los datos para la respuesta (en formato JSON)
-    $response = [
+    echo json_encode([
         'success' => true,
         'message' => '¡Importación completada con éxito!',
         'inserted' => $registrosInsertados,
         'errors' => $errores
-    ];
-
-    header('Content-Type: application/json'); // Cambia el content-type a JSON
-    echo json_encode($response); // Envía los datos como JSON
+    ]);
 
 } catch (Exception $e) {
     $conexion->rollback();
-    header('Content-Type: application/json');
-    echo json_encode([
-        'success' => false,
-        'message' => 'Error en la importación: ' . $e->getMessage()
-    ]);
+    echo json_encode(['success' => false, 'message' => 'Error: ' . $e->getMessage()]);
+} finally {
+    if ($fileExtension === 'zip' && $csvFile) {
+        unlink($csvFile); // Eliminar el CSV temporal
+    }
+    $conexion->close();
 }

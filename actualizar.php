@@ -32,7 +32,7 @@
             </div>
             <div>
                 <h1>ACTUALIZAR USUARIOS</h1>
-                <p class="subtitle">Sube un archivo CSV con los datos de los usuarios a actualizar</p>
+                <p class="subtitle">Sube un archivo CSV o ZIP con los datos de los usuarios a actualizar</p>
             </div>
         </header>
 
@@ -42,10 +42,10 @@
                 <div class="form-group">
                     <label for="inputGroupFile04" class="file-label">
                         <i class="bi bi-cloud-arrow-up-fill"></i>
-                        <span id="fileName">Seleccionar archivo CSV</span>
+                        <span id="fileName">Seleccionar archivo CSV o ZIP</span>
                     </label>
                     <input type="file" class="form-control" id="inputGroupFile04" aria-describedby="fileHelp"
-                        name="file" accept=".csv" required aria-label="Seleccionar archivo CSV">
+                        name="file" accept=".csv, .zip" required aria-label="Seleccionar archivo CSV o ZIP">
                     <small id="fileHelp" class="help-text">
                         <i class="bi bi-info-circle"></i> Archivos .csv hasta 5MB.
                     </small>

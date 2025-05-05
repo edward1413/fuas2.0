@@ -38,11 +38,11 @@ document.getElementById('uploadForm').addEventListener('submit', async function 
         xhr.upload.onload = () => {
             btnText.textContent = 'PROCESANDO...';
             uploadStatus.textContent = 'Archivo subido. Procesando datos...';
-            
+
             // Barra de progreso al 100% (subida completada)
             progressBar.value = 100;
             progressBar.style.transition = 'none'; // Elimina animación para el último paso
-            
+
             // Opcional: Cambiar color de la barra para "procesamiento"
             progressBar.classList.add('processing');
         };
@@ -136,16 +136,17 @@ document.getElementById('inputGroupFile04').addEventListener('change', function 
     if (fileInput.files.length > 0) {
         const file = fileInput.files[0];
 
-        // Validación básica de archivo
-        if (file.size > 5 * 1024 * 1024) { // 5MB
-            fileLabel.textContent = 'Archivo demasiado grande (máx. 5MB)';
+        // Validar tamaño (ej: 10MB máximo para el ZIP)
+        if (file.size > 10 * 1024 * 1024) { // 10MB
+            fileLabel.textContent = 'Archivo demasiado grande (máx. 10MB)';
             fileLabel.style.color = 'var(--error-color)';
             fileInput.value = '';
             return;
         }
 
-        if (!file.name.endsWith('.csv')) {
-            fileLabel.textContent = 'Solo se aceptan archivos CSV';
+        // Validar extensión (.zip o .csv)
+        if (!file.name.match(/\.(zip|csv)$/i)) {
+            fileLabel.textContent = 'Solo se aceptan archivos ZIP o CSV';
             fileLabel.style.color = 'var(--error-color)';
             fileInput.value = '';
             return;
@@ -154,7 +155,7 @@ document.getElementById('inputGroupFile04').addEventListener('change', function 
         fileLabel.innerHTML = `📄 ${file.name}`;
         fileLabel.style.color = 'var(--primary-color)';
     } else {
-        fileLabel.textContent = 'Seleccionar archivo CSV';
+        fileLabel.textContent = 'Seleccionar archivo CSV o ZIP';
         fileLabel.style.color = 'var(--muted-text)';
     }
 });
