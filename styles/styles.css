@@ -43,6 +43,10 @@ body {
     color: #9aaecb;
 }
 
+.form-check-input {
+	margin-top: 0.1rem !important;
+}
+
 .search-results {
     max-height: 200px;
     overflow-y: auto;

@@ -116,20 +116,22 @@ document.getElementById('btn-imprimir').addEventListener('click', function () {
         }
 
         // 👉 CÓDIGO DE PRESTACIÓN 
-        const codigoPrestacion = sessionStorage.getItem('codigoPrestacion') || '';
-        iframeDocument.getElementById('prestacion-fua').textContent = codigoPrestacion;
+        iframeDocument.getElementById('prestacion-fua').textContent = sessionStorage.getItem('codigoPrestacion') || '';
 
-        // 👉 MARCAR X SI NO ES 056
-        if (codigoPrestacion !== '056') {
+
+
+        // 👉 CÓDIGO Y DESCRIPCIÓN DIAGNOSTICO
+        iframeDocument.getElementById('codigo-cie10').textContent = sessionStorage.getItem('codigoCIE10') || '';
+        iframeDocument.getElementById('descripcion-cie10').textContent = sessionStorage.getItem('descripcionCIE10') || '';
+
+        // 👉 MARCAR X SI codigoCIE10 NO ESTÁ VACÍO
+        const codigoCIE10 = sessionStorage.getItem('codigoCIE10') || '';
+        if (codigoCIE10.trim() !== '') {
             const xMark = iframeDocument.getElementById('tipo-cie10');
             if (xMark) {
                 xMark.textContent = 'X';
             }
         }
-
-        // 👉 CÓDIGO Y DESCRIPCIÓN DIAGNOSTICO
-        iframeDocument.getElementById('codigo-cie10').textContent = sessionStorage.getItem('codigoCIE10') || '';
-        iframeDocument.getElementById('descripcion-cie10').textContent = sessionStorage.getItem('descripcionCIE10') || '';
 
         // 👉 DATOS DEL PERSONAL
         iframeDocument.getElementById('numero-documento-personal').textContent = sessionStorage.getItem('numeroDocumentoPersonal') || '';

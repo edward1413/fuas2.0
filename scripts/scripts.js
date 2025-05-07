@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', function () {
     sessionStorage.removeItem('codigoCIE10');
     sessionStorage.removeItem('descripcionCIE10');
     sessionStorage.removeItem('codigoPrestacion');
+    sessionStorage.removeItem('codigoPrestacion');
 
     // 2. DESHABILITAR CAMPOS (solo aquí)
     const codigoCIE10 = document.getElementById('codigo-cie10');
@@ -39,7 +40,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // 5. LÓGICA DE PRESTACIÓN
     //creamos una variable para almacenar lo que se escribirá en codigo-prestacion del index.php, y que solo se ingrese 3 números
-    var codigoPrestacion = document.getElementById('codigo-prestacion');
+    const codigoPrestacion = document.getElementById('codigo-prestacion');
     //agregamos un input al campo de la entrada
     codigoPrestacion.addEventListener('input', function () {
         //limitamos a solo numeros
@@ -52,17 +53,12 @@ document.addEventListener('DOMContentLoaded', function () {
         }
         // Si ya tiene 3 dígitos, disparar automáticamente el evento "Enter"
         if (this.value.length === 3) {
-            // Crear un evento de teclado simulando "Enter"
-            var enterEvent = new KeyboardEvent('keydown', {  // Crear un nuevo evento de teclado
-                // Definir el tipo de evento como 'keydown' (tecla presionada hacia abajo)
+            // Disparar el evento en el campo
+            this.dispatchEvent(new KeyboardEvent('keydown', {
                 key: 'Enter', // Especificar la tecla como 'Enter'
                 keyCode: 13, // Código de la tecla 'Enter'
-                which: 13, // Código de la tecla 'Enter' (deprecated, pero a veces usado)
                 bubbles: true // Permitir que el evento burbujee (propague) hacia arriba en el DOM
-            });
-
-            // Disparar el evento en el campo
-            this.dispatchEvent(enterEvent);
+            }));
         }
     })
 });

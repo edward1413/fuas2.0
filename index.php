@@ -40,7 +40,7 @@
                                 <h2 class="section-title">DATOS DEL PACIENTE</h2>
                             </div>
                             <div class="col-lg-4 d-flex">
-                                <input id="codigoAfiliado" class="form-check-input me-2" type="checkbox">
+                                <input id="codigoAfiliado" class="form-check-input me-2" type="checkbox" checked>
                                 <label class="form-check-label" for="codigoAfiliado">CÓDIGO DE AFILIADO</label>
                             </div>
                         </div>
@@ -170,7 +170,7 @@
                 <div class="card-body">
                     <div class="row g-2">
                         <div class="col-md-2">
-                            <h2 class="section-title">DIAGNÓSTICO</h2>
+                            <label for="switchcie10" class="section-title">DIAGNÓSTICO</label>
                         </div>
                         <div class="col-md-1 form-check form-switch">
                             <input type="checkbox" class="form-check-input" id="switchcie10">
@@ -223,7 +223,7 @@
             </div>
 
             <div class="footer-contact">
-                <p><i class="bi bi-geo-alt-fill"></i> Av. Los Incas Mz. I - Lt. 2, Chimbote</p>
+                <p><i class="bi bi-geo-alt-fill"></i> Av. Los Incas Mz. L' - Lt. 2, Chimbote</p>
                 <p><i class="bi bi-telephone-fill"></i> <strong>Fijo:</strong> (043) 700697</p>
                 <p><i class="bi bi-envelope-fill"></i> csmcdosdejunio2020@gmail.com</p>
             </div>
@@ -236,7 +236,7 @@
 
             <div class="footer-legal">
                 <p>&copy; 2025 CSMC Dos de Junio. Todos los derechos reservados.</p>
-                <p><small>v2.1.0 | Última actualización: Mayo 2025</small></p>
+                <p><small>v2.1.1 | Última actualización: 06 Mayo 2025</small></p>
                 <p>Ingeniero de sistemas - Edward Rivera Moreno</p>
             </div>
         </div>

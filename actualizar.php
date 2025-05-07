@@ -47,7 +47,7 @@
                     <input type="file" class="form-control" id="inputGroupFile04" aria-describedby="fileHelp"
                         name="file" accept=".csv, .zip" required aria-label="Seleccionar archivo CSV o ZIP">
                     <small id="fileHelp" class="help-text">
-                        <i class="bi bi-info-circle"></i> Archivos .csv hasta 5MB.
+                        <i class="bi bi-info-circle"></i> Archivos .csv o .zip hasta 5MB.
                     </small>
                 </div>
             </div>
