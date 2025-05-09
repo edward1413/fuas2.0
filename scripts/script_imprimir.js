@@ -22,21 +22,39 @@ document.getElementById('btn-imprimir').addEventListener('click', function () {
             return;
         }
 
-        // 👉 FECHA Y HORA ACTUALES DE IMPRESION
-        const now = new Date();
-        const dia = String(now.getDate()).padStart(2, '0');          // Día con dos dígitos
-        const mes = String(now.getMonth() + 1).padStart(2, '0');     // Mes con dos dígitos (0 = enero)
-        const anio = String(now.getFullYear());                      // Año en formato completo
-        const hora = String(now.getHours()).padStart(2, '0');        // Hora con dos dígitos
-        const minuto = String(now.getMinutes()).padStart(2, '0');    // Minuto con dos dígitos
+        let fechaImpresion;
+        const switchDateTime = document.getElementById('switchdatetime');
+        const dateTimeInput = document.getElementById('date-time');
+
+        if (switchDateTime.checked && dateTimeInput.value) {
+            // Si el switch está habilitado y hay una fecha seleccionada, usa esa fecha
+            fechaImpresion = new Date(dateTimeInput.value);
+        } else {
+            // Si el switch está deshabilitado o no hay fecha seleccionada, usa la fecha del sistema
+            fechaImpresion = new Date();
+        }
+
+        const dia = String(fechaImpresion.getDate()).padStart(2, '0');
+        const mes = String(fechaImpresion.getMonth() + 1).padStart(2, '0');
+        const anio = String(fechaImpresion.getFullYear());
 
         // Inserta la fecha en los elementos del iframe
         iframeDocument.getElementById('dia-atencion').textContent = dia;
         iframeDocument.getElementById('mes-atencion').textContent = mes;
         iframeDocument.getElementById('anio-atencion').textContent = anio;
 
-        // Inserta la hora en el elemento correspondiente
-        iframeDocument.getElementById('hora-impresion').textContent = `${hora}:${minuto}`;
+        // 👉 HORA DE IMPRESIÓN (SI SE USÓ LA FECHA DEL SISTEMA)
+        if (!switchDateTime.checked || !dateTimeInput.value) {
+            const now = new Date();
+            const hora = String(now.getHours()).padStart(2, '0');
+            const minuto = String(now.getMinutes()).padStart(2, '0');
+            iframeDocument.getElementById('hora-impresion').textContent = `${hora}:${minuto}`;
+        } else {
+            // Si se seleccionó una fecha/hora específica, podrías formatearla aquí si es necesario
+            const horaSeleccionada = String(fechaImpresion.getHours()).padStart(2, '0');
+            const minutoSeleccionado = String(fechaImpresion.getMinutes()).padStart(2, '0');
+            iframeDocument.getElementById('hora-impresion').textContent = `${horaSeleccionada}:${minutoSeleccionado}`;
+        }
 
         // 👉 MARCAR INTRAMURAL / EXTRAMURAL SEGÚN LO SELECCIONADO
         const selectedLugar = document.querySelector('input[name="lugar-atencion"]:checked').value;
@@ -46,9 +64,9 @@ document.getElementById('btn-imprimir').addEventListener('click', function () {
 
         if (selectedLugar === 'intramural') {
             xIntramural.textContent = 'X';   // Mostrar X en intramural
-            xExtramural.textContent = '';    // Limpiar extramural
+            xExtramural.textContent = '';     // Limpiar extramural
         } else if (selectedLugar === 'extramural') {
-            xIntramural.textContent = '';    // Limpiar intramural
+            xIntramural.textContent = '';     // Limpiar intramural
             xExtramural.textContent = 'X';   // Mostrar X en extramural
         }
 
@@ -111,13 +129,12 @@ document.getElementById('btn-imprimir').addEventListener('click', function () {
                 generoPacienteF.textContent = '';     // Limpiar femenino
             } else if (generoPaciente === 'F') {
                 generoPacienteM.textContent = '';     // Limpiar masculino
-                generoPacienteF.textContent = 'X';    // Mostrar X en femenino
+                generoPacienteF.textContent = 'X';   // Mostrar X en femenino
             }
         }
 
-        // 👉 CÓDIGO DE PRESTACIÓN 
+        // 👉 CÓDIGO DE PRESTACIÓN
         iframeDocument.getElementById('prestacion-fua').textContent = sessionStorage.getItem('codigoPrestacion') || '';
-
 
 
         // 👉 CÓDIGO Y DESCRIPCIÓN DIAGNOSTICO
@@ -125,8 +142,8 @@ document.getElementById('btn-imprimir').addEventListener('click', function () {
         iframeDocument.getElementById('descripcion-cie10').textContent = sessionStorage.getItem('descripcionCIE10') || '';
 
         // 👉 MARCAR X SI codigoCIE10 NO ESTÁ VACÍO
-        const codigoCIE10 = sessionStorage.getItem('codigoCIE10') || '';
-        if (codigoCIE10.trim() !== '') {
+        const codigoCIE10Imprimir = sessionStorage.getItem('codigoCIE10') || '';
+        if (codigoCIE10Imprimir.trim() !== '') {
             const xMark = iframeDocument.getElementById('tipo-cie10');
             if (xMark) {
                 xMark.textContent = 'X';

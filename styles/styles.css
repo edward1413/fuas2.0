@@ -44,7 +44,7 @@ body {
 }
 
 .form-check-input {
-	margin-top: 0.1rem !important;
+    margin-top: 0.1rem !important;
 }
 
 .search-results {
@@ -235,3 +235,102 @@ body {
         max-width: 95%;
     }
 }
+
+.date-time {
+    width: 100%;
+    padding: 0.3rem;
+    font-size: 0.75rem;
+    border: 1px solid #4c9cdb;
+    border-radius: 4px;
+    background-color: #1a2c47;
+    color: #dbe4f1;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Cuando el usuario interactúe con el campo */
+.date-time:focus {
+    border-color: #6baed6;
+    box-shadow: 0 0 0 3px rgba(76, 156, 219, 0.3);
+    outline: none;
+    background-color: #1f3254;
+}
+
+#lugar-atencion {
+    margin-bottom: 0.45rem;
+}
+
+.fecha-hora {
+    padding-top: 4px !important;
+    border-radius: 4px;
+}
+
+.flatpickr-input {
+    background-color: #1a2c47 !important;
+    color: #dbe4f1 !important;
+    border: 1px solid #4c9cdb !important;
+    padding: 0.25rem !important;
+    font-size: 0.75rem !important;
+    border-radius: 4px !important;
+    height: calc(1.5em + 0.5rem + 2px) !important;
+}
+
+.flatpickr-input:focus {
+    border-color: #6baed6 !important;
+    box-shadow: 0 0 0 3px rgba(76, 156, 219, 0.3) !important;
+    outline: none !important;
+    background-color: #1f3254 !important;
+}
+
+.invalid-feedback {
+    display: block;
+    margin-top: 0.25rem;
+    font-size: 0.75rem;
+    color: #f86c6c;
+}
+
+.flatpickr-calendar {
+    width: 320px; /* Ancho general más pequeño */
+    padding: 4px; /* Reducir el padding general */
+  }
+  
+  .flatpickr-day {
+    width: 20px; /* Días más angostos */
+    height: 26px; /* Días más bajos */
+    font-size: 0.8em; /* Fuente de los días más pequeña */
+    line-height: 26px;
+    margin: 1px; /* Reducir el margen entre días */
+  }
+  
+  .flatpickr-month {
+    padding: 6px 8px; /* Menos padding en el encabezado del mes */
+  }
+  
+  .flatpickr-current-month {
+    font-size: 0.9em; /* Fuente del mes y año un poco más pequeña */
+  }
+  
+  .flatpickr-prev-month,
+  .flatpickr-next-month {
+    padding: 4px; /* Menos padding en los botones de navegación */
+    font-size: 0.7em; /* Fuente de los botones más pequeña */
+    line-height: 1; /* Ajustar la altura de línea */
+  }
+  
+  .flatpickr-weekday {
+    font-size: 0.7em; /* Fuente de los días de la semana más pequeña */
+    padding: 2px; /* Menos padding para los días de la semana */
+  }
+  
+  .flatpickr-time {
+    height: 24px; /* Selector de tiempo más bajo */
+    margin-top: 4px; /* Reducir el margen superior del tiempo */
+  }
+  
+  .flatpickr-time input {
+    height: 24px; /* Inputs de hora y minuto más bajos */
+    font-size: 0.8em;
+  }
+  
+  .flatpickr-time .flatpickr-am-pm {
+    font-size: 0.7em; /* Fuente del AM/PM más pequeña */
+  }
