@@ -189,7 +189,7 @@
                         <div class="row g-2">
                             <div class="col-lg-12" style="margin-top: 4px;">
                                 <input type="text" id="date-time" class="form-control form-control-sm flatpickr-input"
-                                    placeholder="Seleccionar fecha y hora">
+                                    placeholder="Seleccionar fehca y hora">
                             </div>
                         </div>
                     </div>
@@ -266,7 +266,7 @@
 
                 <div class="footer-legal">
                     <p>&copy; 2025 CSMC Dos de Junio. Todos los derechos reservados.</p>
-                    <p><small>v2.1.1 | Última actualización: 06 Mayo 2025</small></p>
+                    <p><small>v2.2.1 | Última actualización: 09 Mayo 2025</small></p>
                     <p>Ingeniero de sistemas - Edward Rivera Moreno</p>
                 </div>
             </div>

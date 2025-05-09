@@ -56,7 +56,6 @@ document.addEventListener('DOMContentLoaded', function () {
         dateFormat: "Y-m-d H:i",
         time_24hr: true,
         locale: "es",
-        defaultDate: "today",
         allowInput: true,
         clickOpens: true
     });
