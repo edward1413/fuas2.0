@@ -1,12 +1,12 @@
 // Escucha el clic en el botón con id "btn-imprimir"
-document.getElementById('btn-imprimir').addEventListener('click', function () {
+document.getElementById('btn-imprimir2').addEventListener('click', function () {
 
     // Crea un iframe oculto donde se cargará el contenido para imprimir
     const iframe = document.createElement('iframe');
     iframe.style.position = 'absolute';
     iframe.style.top = '-9999px';
     iframe.style.left = '-9999px';
-    iframe.src = 'print-fua.html'; // Ruta del archivo HTML que contiene el diseño del FUA
+    iframe.src = 'html/print-fua-new.html'; // Ruta del archivo HTML que contiene el diseño del FUA
     document.body.appendChild(iframe); // Añade el iframe al cuerpo del documento
 
     // Espera a que el iframe termine de cargar
@@ -73,6 +73,9 @@ document.getElementById('btn-imprimir').addEventListener('click', function () {
         // 👉 DATOS DEL PACIENTE
         // Obtener el tipo de documento del paciente desde sessionStorage
         const tipoDocumentoPaciente = sessionStorage.getItem('tipoDocumentoPaciente');
+        // Obtener el checkbox y el tipo de documento del paciente desde sessionStorage
+        const checkbox = document.getElementById('codigoAfiliado');
+
         if (tipoDocumentoPaciente) {
             const valorImpresion = (tipoDocumentoPaciente === '1') ? '2' : '3'; // lógica de conversión
             const campoTipoDoc = iframeDocument.getElementById('tipo-documento-paciente');
@@ -81,6 +84,25 @@ document.getElementById('btn-imprimir').addEventListener('click', function () {
             }
         }
 
+        // Función para imprimir tipoDocumentoPaciente en codigo-asegurado
+        function imprimirCodigoAsegurado() {
+            if (checkbox.checked && tipoDocumentoPaciente) {
+                const valorImpresion = (tipoDocumentoPaciente === '1') ? '2' : '3'; // misma lógica de conversión
+                const campoCodigoAsegurado = iframeDocument.getElementById('codigo-asegurado');
+                iframeDocument.getElementById('numero-asegurado').textContent = sessionStorage.getItem('numeroDocumentoPaciente') || '';
+                if (campoCodigoAsegurado) {
+                    campoCodigoAsegurado.textContent = valorImpresion;
+                }
+            }
+        }
+
+        // Añadir event listener para el evento change
+        checkbox.addEventListener('change', imprimirCodigoAsegurado);
+
+        // Llamar a la función inicialmente en caso de que el checkbox ya esté seleccionado
+        imprimirCodigoAsegurado();
+
+
         // Obtener los datos del paciente desde sessionStorage
         iframeDocument.getElementById('primer-nombre-paciente').textContent = sessionStorage.getItem('primerNombrePaciente') || '';
         iframeDocument.getElementById('otros-nombres-paciente').textContent = sessionStorage.getItem('otrosNombresPaciente') || '';
@@ -88,25 +110,6 @@ document.getElementById('btn-imprimir').addEventListener('click', function () {
         iframeDocument.getElementById('apellido-materno-paciente').textContent = sessionStorage.getItem('apellidoMaternoPaciente') || '';
         iframeDocument.getElementById('numero-documento-paciente').textContent = sessionStorage.getItem('numeroDocumentoPaciente') || '';
         iframeDocument.getElementById('numero-historia-clinica').textContent = sessionStorage.getItem('numeroDocumentoPaciente') || '';
-
-
-        function imprimirDatosAsegurado(iframeDocument) {
-            const mostrar = document.getElementById('codigoAfiliado').checked;
-            const codigoAsegurado = iframeDocument.getElementById('codigo-asegurado');
-            const numeroAsegurado = iframeDocument.getElementById('numero-asegurado');
-
-            if (mostrar) {
-                const tipoDoc = sessionStorage.getItem('tipoDocumentoPaciente');
-                codigoAsegurado.textContent = tipoDoc === '1' ? '2' : '3';
-                numeroAsegurado.textContent = sessionStorage.getItem('numeroDocumentoPaciente') || '';
-            } else {
-                codigoAsegurado.textContent = '';
-                numeroAsegurado.textContent = '';
-            }
-        }
-
-        // Llamar la función en tu evento de impresión
-        imprimirDatosAsegurado(iframeDocument);
 
         // Fecha de nacimiento del paciente
         const fechaNacimiento = sessionStorage.getItem('fechaNacimientoPaciente');

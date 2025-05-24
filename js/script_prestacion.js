@@ -6,7 +6,7 @@ const descripcionPrestacion = document.getElementById('descripcion-prestacion');
 function buscarPrestacion(codigo) {
     if (codigo.length > 0) {
         var xhr = new XMLHttpRequest();
-        xhr.open('GET', 'buscar/buscar_prestacion.php?codigo-prestacion=' + encodeURIComponent(codigo), true);
+        xhr.open('GET', 'php/buscar_prestacion.php?codigo-prestacion=' + encodeURIComponent(codigo), true);
         xhr.onreadystatechange = function () {
             if (xhr.readyState == 4 && xhr.status == 200) { 
                 var response = JSON.parse(xhr.responseText);

@@ -158,7 +158,7 @@ export function seleccionarPersonal(item) {
         "9": "200"
     };
 
-    // 👇 Lógica corregida para buscar prestación
+    // 👇 Lógica para buscar prestación
     if (profesionCodigos.hasOwnProperty(idProfesion)) {
         const codigoIdProfesion = profesionCodigos[idProfesion];
         const codigoPrestacionInput = document.getElementById('codigo-prestacion');
@@ -218,40 +218,3 @@ document.getElementById('codigo-cie10').addEventListener('input', function () {
     }
 });
 
-// Función para verificar el estado de los formularios
-export function actualizarEstadoBotonImprimir() {
-    const formPaciente = document.getElementById('form-paciente');
-    const formPersonal = document.getElementById('form-personal');
-    const btnImprimir = document.getElementById('btn-imprimir');
-    const mensajeImpresion = document.getElementById('mensaje-impresion');
-
-    // Verificar si ambos formularios están visibles
-    const ambosVisibles = !formPaciente.classList.contains('d-none') &&
-                            !formPersonal.classList.contains('d-none');
-
-    // Habilitar/deshabilitar botón
-    btnImprimir.disabled = !ambosVisibles;
-
-    // Ocultar mensaje cuando ambos formularios son visibles, mostrarlo en caso contrario
-    mensajeImpresion.classList.toggle('visible', !ambosVisibles);
-}
-
-// Observar cambios en los formularios
-const observer = new MutationObserver(actualizarEstadoBotonImprimir);
-
-// Configurar qué observar
-const config = { attributes: true, attributeFilter: ['class'] };
-
-// Comenzar a observar ambos formularios
-observer.observe(document.getElementById('form-paciente'), config);
-observer.observe(document.getElementById('form-personal'), config);
-
-// Ejecutar al cargar la página
-document.addEventListener('DOMContentLoaded', function () {
-    actualizarEstadoBotonImprimir();
-
-    // También puedes llamar a esta función cuando:
-    // - Selecciones un paciente
-    // - Selecciones personal
-    // - Cierres formularios
-});

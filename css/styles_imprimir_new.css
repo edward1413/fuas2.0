@@ -1,0 +1,70 @@
+@media print {
+    @page {
+        /* Tamaño A4 (por defecto) */
+        /* size: A4;*/
+
+        /* Tamaño Carta (Letter - EE.UU.) */
+        size: Letter; 
+
+        /* Tamaño personalizado (ej: 15cm x 20cm) */
+        /* size: 15cm 20cm; */
+ 
+        /* Elimina márgenes predeterminados */
+        margin: 0;
+    }
+
+    body {
+        width: 21cm;
+        height: 29.7cm;
+        margin: 0;
+        padding: 0;
+        background: white;
+    }
+
+    #print-marks {
+        /* Ancho A4 */
+        width: 21cm;
+        /* Alto A4 */
+        height: 29.7cm;
+        position: absolute;
+        top: 0;
+        left: 0;
+        background: white;
+    }
+
+    .x-mark {
+        position: absolute;
+        font-family: Arial, sans-serif;
+        font-weight: bold;
+        font-size: 10pt;
+        color: black;
+        word-spacing: 2pt;
+        letter-spacing: 1pt;
+    }
+
+    .fecha-atencion {
+        letter-spacing: 11.25pt;
+    }
+
+    .hora-atencion {
+        letter-spacing: 3.75pt;
+    }
+
+    .fecha-nacimiento {
+        letter-spacing: 8pt;
+    }
+
+    .fecha-nacimiento-anio {
+        letter-spacing: 16pt;
+    }
+
+    .descripcion-cie10 {
+        width: 8.9cm;
+        word-wrap: break-word;
+        white-space: normal;
+        font-size: 7pt !important;
+        font-weight: normal !important;
+        word-spacing: 1mm;
+        letter-spacing: 0.2mm;
+    }
+}

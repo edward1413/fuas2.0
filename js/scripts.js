@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const codigoCIE10 = document.getElementById('codigo-cie10');
     const descripcionCIE10 = document.getElementById('descripcion-cie10');
     const buscarCIE10 = document.getElementById('buscar-cie10');
-    const dateTime = document.getElementById('date-time'); // Esta es la variable correcta
+    const dateTime = document.getElementById('date-time'); 
 
     codigoCIE10.disabled = true;
     descripcionCIE10.disabled = true;
