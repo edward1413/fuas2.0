@@ -1,172 +1,202 @@
-document.getElementById('uploadForm').addEventListener('submit', async function (e) {
+// Configuración global
+const CONFIG = {
+    maxFileSize: 10 * 1024 * 1024, // 10MB
+    allowedExtensions: ['csv', 'zip'],
+    uploadTimeout: 120000, // 2 minutos
+    apiEndpoint: 'procesar_csv.php'
+};
+
+// Elementos del DOM
+const elements = {
+    form: document.getElementById('uploadForm'),
+    fileInput: document.getElementById('inputGroupFile04'),
+    dropZone: document.getElementById('dropZone'),
+    fileName: document.getElementById('fileName'),
+    fileInfo: document.getElementById('fileInfo'),
+    fileDetails: document.getElementById('fileDetails'),
+    responseDiv: document.getElementById('response'),
+    button: document.querySelector('.btn-upload'),
+    spinner: document.querySelector('.spinner'),
+    btnText: document.querySelector('.btn-text'),
+    progressBar: document.getElementById('uploadProgress'),
+    uploadStatus: document.getElementById('uploadStatus')
+};
+
+// Clase para manejar validaciones
+class FileValidator {
+    static validate(file) {
+        const errors = [];
+
+        if (file.size > CONFIG.maxFileSize) {
+            errors.push(`El archivo es demasiado grande. Máximo ${CONFIG.maxFileSize / (1024 * 1024)}MB`);
+        }
+
+        const extension = file.name.split('.').pop().toLowerCase();
+        if (!CONFIG.allowedExtensions.includes(extension)) {
+            errors.push(`Formato no válido. Solo se aceptan: ${CONFIG.allowedExtensions.join(', ')}`);
+        }
+
+        return {
+            isValid: errors.length === 0,
+            errors
+        };
+    }
+}
+
+// Clase para manejar la UI
+class UIManager {
+    static showFileInfo(file) {
+        const sizeFormatted = (file.size / 1024 / 1024).toFixed(2);
+        elements.fileDetails.textContent = `${file.name} (${sizeFormatted} MB)`;
+        elements.fileInfo.classList.add('show');
+        elements.dropZone.classList.add('validation-success');
+    }
+
+    static hideFileInfo() {
+        elements.fileInfo.classList.remove('show');
+        elements.dropZone.classList.remove('validation-success', 'validation-error');
+    }
+
+    static showError(message) {
+        elements.fileName.textContent = message;
+        elements.dropZone.classList.add('validation-error');
+        this.hideFileInfo();
+    }
+
+    static resetFileDisplay() {
+        elements.fileName.textContent = 'Arrastra tu archivo aquí o haz clic para seleccionar';
+        elements.dropZone.classList.remove('validation-success', 'validation-error');
+        this.hideFileInfo();
+    }
+
+    static updateUploadProgress(percent) {
+        elements.progressBar.value = percent;
+        elements.uploadStatus.textContent = `Subiendo archivo... ${percent}%`;
+    }
+
+    static setLoadingState(isLoading, text = 'SUBIENDO...') {
+        elements.spinner.style.display = isLoading ? 'inline-block' : 'none';
+        elements.btnText.textContent = isLoading ? text : 'SUBIR ARCHIVO';
+        elements.button.disabled = isLoading;
+        elements.progressBar.style.display = isLoading ? 'block' : 'none';
+
+        if (!isLoading) {
+            elements.uploadStatus.textContent = '';
+        }
+    }
+
+    static showResponse(content, type = 'success') {
+        elements.responseDiv.innerHTML = content;
+        elements.responseDiv.className = `show ${type}`;
+        elements.responseDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+}
+
+// Manejador de eventos del formulario
+elements.form.addEventListener('submit', async function (e) {
     e.preventDefault();
 
-    const form = this;
-    const formData = new FormData(form);
-    const responseDiv = document.getElementById('response');
-    const button = document.querySelector('.btn-upload');
-    const spinner = button.querySelector('.spinner');
-    const btnText = button.querySelector('.btn-text');
-    const progressBar = document.getElementById('uploadProgress');
-    const uploadStatus = document.getElementById('uploadStatus');
-
-    // Reset UI
-    spinner.style.display = 'inline-block';
-    btnText.textContent = 'SUBIENDO...';
-    button.disabled = true;
-    responseDiv.textContent = '';
-    responseDiv.className = '';
-    progressBar.style.display = 'block';
-    progressBar.value = 0;
-    uploadStatus.textContent = '';
+    const formData = new FormData(this);
+    UIManager.setLoadingState(true);
+    elements.responseDiv.className = '';
 
     try {
+        const response = await uploadFile(formData);
+        handleUploadResponse(response);
+    } catch (error) {
+        console.error('Error:', error);
+        UIManager.showResponse('Error de red. Por favor intente nuevamente.', 'error');
+    } finally {
+        UIManager.setLoadingState(false);
+    }
+});
+
+// Función para subir archivo con XMLHttpRequest
+function uploadFile(formData) {
+    return new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
 
-        // Configurar eventos de progreso
         xhr.upload.addEventListener('progress', (e) => {
             if (e.lengthComputable) {
                 const percent = Math.round((e.loaded / e.total) * 100);
-                progressBar.value = percent;
-                uploadStatus.textContent = `Subiendo archivo... ${percent}%`;
-
-                // Animación suave de la barra
-                progressBar.style.transition = 'width 0.3s ease';
+                UIManager.updateUploadProgress(percent);
             }
         });
 
         xhr.upload.onload = () => {
-            btnText.textContent = 'PROCESANDO...';
-            uploadStatus.textContent = 'Archivo subido. Procesando datos...';
-
-            // Barra de progreso al 100% (subida completada)
-            progressBar.value = 100;
-            progressBar.style.transition = 'none'; // Elimina animación para el último paso
-
-            // Opcional: Cambiar color de la barra para "procesamiento"
-            progressBar.classList.add('processing');
+            UIManager.setLoadingState(true, 'PROCESANDO...');
+            elements.uploadStatus.textContent = 'Archivo subido. Procesando datos...';
+            elements.progressBar.value = 100;
         };
 
-        // Manejar respuesta
-        xhr.onreadystatechange = () => {
-            if (xhr.readyState === XMLHttpRequest.DONE) {
-                resetUI();
-
-                if (xhr.status === 200) {
-                    handleSuccessResponse(xhr);
-                } else {
-                    handleErrorResponse(xhr);
-                }
-            }
-        };
-
-        xhr.open('POST', 'procesar_csv.php', true);
-        xhr.timeout = 60000; // 1 minuto timeout
-        xhr.send(formData);
-
-    } catch (error) {
-        console.error('Error:', error);
-        handleNetworkError();
-    }
-
-    function resetUI() {
-        spinner.style.display = 'none';
-        btnText.textContent = 'SUBIR ARCHIVO';
-        button.disabled = false;
-        progressBar.style.display = 'none';
-        uploadStatus.textContent = '';
-    }
-
-    function handleSuccessResponse(xhr) {
-        try {
-            const response = JSON.parse(xhr.responseText);
-
-            if (response.success) {
-                // Construye el mensaje de éxito dinámicamente
-                let successHTML = `
-                    <h3>Resultado de la importación</h3>
-                    <p><strong>Registros insertados:</strong> ${response.inserted}</p>
-                `;
-
-                if (response.errors > 0) {
-                    successHTML += `<p><strong>Registros con errores:</strong> ${response.errors}</p>`;
-                }
-
-                successHTML += `<p>${response.message}</p>`;
-
-                responseDiv.innerHTML = successHTML;
-                responseDiv.className = 'show success';
-                form.reset();
-                document.querySelector('.file-label').textContent = 'Seleccionar archivo CSV';
+        xhr.onload = () => {
+            if (xhr.status === 200) {
+                resolve(xhr.responseText);
             } else {
-                // Manejo de errores del servidor (ej: validación fallida)
-                responseDiv.textContent = response.message;
-                responseDiv.className = 'show error';
+                reject(new Error(`HTTP ${xhr.status}: ${xhr.statusText}`));
             }
-        } catch (e) {
-            // Fallback para respuestas no JSON (por compatibilidad)
-            console.error("Error parsing JSON:", e);
-            const isSuccess = xhr.responseText.includes("Importación completada");
-            responseDiv.innerHTML = xhr.responseText;
-            responseDiv.className = isSuccess ? 'show success' : 'show error';
+        };
+
+        xhr.onerror = () => reject(new Error('Error de conexión'));
+        xhr.ontimeout = () => reject(new Error('Tiempo de espera agotado'));
+
+        xhr.open('POST', CONFIG.apiEndpoint, true);
+        xhr.timeout = CONFIG.uploadTimeout;
+        xhr.send(formData);
+    });
+}
+
+// Manejo de respuesta del servidor
+function handleUploadResponse(responseText) {
+    try {
+        const response = JSON.parse(responseText);
+
+        if (response.success) {
+            let successHTML = `
+                        <h3><i class="bi bi-check-circle-fill"></i> Importación Completada</h3>
+                        <p><strong>Registros procesados:</strong> ${response.inserted || 0}</p>
+                    `;
+
+            if (response.errors > 0) {
+                successHTML += `<p><strong>Registros con errores:</strong> ${response.errors}</p>`;
+            }
+
+            successHTML += `<p>${response.message}</p>`;
+
+            UIManager.showResponse(successHTML, 'success');
+            elements.form.reset();
+            UIManager.resetFileDisplay();
+        } else {
+            UIManager.showResponse(`<h3><i class="bi bi-exclamation-triangle-fill"></i> Error</h3><p>${response.message}</p>`, 'error');
         }
+    } catch (e) {
+        // Fallback para respuestas no JSON
+        const isSuccess = responseText.includes("Importación completada") || responseText.includes("éxito");
+        UIManager.showResponse(responseText, isSuccess ? 'success' : 'error');
     }
+}
 
-    function handleErrorResponse(xhr) {
-        const errorMsg = xhr.status === 0 ?
-            'Error de conexión. Verifique su red.' :
-            `Error ${xhr.status}: ${xhr.statusText}`;
+// Manejo de selección de archivos
+elements.fileInput.addEventListener('change', function (e) {
+    const file = this.files[0];
 
-        responseDiv.textContent = errorMsg;
-        responseDiv.className = 'show error';
-    }
+    if (file) {
+        const validation = FileValidator.validate(file);
 
-    function handleNetworkError() {
-        responseDiv.textContent = 'Error de red. Por favor intente nuevamente.';
-        responseDiv.className = 'show error';
-        resetUI();
-    }
-});
-
-// Manejo mejorado de selección de archivos
-document.getElementById('inputGroupFile04').addEventListener('change', function (e) {
-    const fileInput = this;
-    const fileLabel = document.querySelector('.file-label');
-
-    if (fileInput.files.length > 0) {
-        const file = fileInput.files[0];
-
-        // Validar tamaño (ej: 10MB máximo para el ZIP)
-        if (file.size > 10 * 1024 * 1024) { // 10MB
-            fileLabel.textContent = 'Archivo demasiado grande (máx. 10MB)';
-            fileLabel.style.color = 'var(--error-color)';
-            fileInput.value = '';
-            return;
+        if (validation.isValid) {
+            UIManager.showFileInfo(file);
+        } else {
+            UIManager.showError(validation.errors[0]);
+            this.value = '';
         }
-
-        // Validar extensión (.zip o .csv)
-        if (!file.name.match(/\.(zip|csv)$/i)) {
-            fileLabel.textContent = 'Solo se aceptan archivos ZIP o CSV';
-            fileLabel.style.color = 'var(--error-color)';
-            fileInput.value = '';
-            return;
-        }
-
-        fileLabel.innerHTML = `📄 ${file.name}`;
-        fileLabel.style.color = 'var(--primary-color)';
     } else {
-        fileLabel.textContent = 'Seleccionar archivo CSV o ZIP';
-        fileLabel.style.color = 'var(--muted-text)';
+        UIManager.resetFileDisplay();
     }
 });
 
-// Implementar drag & drop
-const dropZone = document.getElementById('dropZone');
-const fileInput = document.getElementById('inputGroupFile04');
-const fileName = document.getElementById('fileName');
-
+// Drag & Drop functionality
 ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-    dropZone.addEventListener(eventName, preventDefaults, false);
+    elements.dropZone.addEventListener(eventName, preventDefaults, false);
 });
 
 function preventDefaults(e) {
@@ -175,35 +205,36 @@ function preventDefaults(e) {
 }
 
 ['dragenter', 'dragover'].forEach(eventName => {
-    dropZone.addEventListener(eventName, highlight, false);
+    elements.dropZone.addEventListener(eventName, () => {
+        elements.dropZone.classList.add('highlight');
+    }, false);
 });
 
 ['dragleave', 'drop'].forEach(eventName => {
-    dropZone.addEventListener(eventName, unhighlight, false);
+    elements.dropZone.addEventListener(eventName, () => {
+        elements.dropZone.classList.remove('highlight');
+    }, false);
 });
 
-function highlight() {
-    dropZone.classList.add('highlight');
-}
+elements.dropZone.addEventListener('drop', function (e) {
+    const files = e.dataTransfer.files;
 
-function unhighlight() {
-    dropZone.classList.remove('highlight');
-}
+    if (files.length > 0) {
+        elements.fileInput.files = files;
 
-dropZone.addEventListener('drop', handleDrop, false);
+        const file = files[0];
+        const validation = FileValidator.validate(file);
 
-function handleDrop(e) {
-    const dt = e.dataTransfer;
-    const files = dt.files;
-
-    if (files.length) {
-        fileInput.files = files;
-        updateFileName();
+        if (validation.isValid) {
+            UIManager.showFileInfo(file);
+        } else {
+            UIManager.showError(validation.errors[0]);
+            elements.fileInput.value = '';
+        }
     }
-}
+}, false);
 
-function updateFileName() {
-    if (fileInput.files.length) {
-        fileName.textContent = fileInput.files[0].name;
-    }
-}
+// Hacer clic en el área de drop para abrir selector
+elements.dropZone.addEventListener('click', () => {
+    elements.fileInput.click();
+});

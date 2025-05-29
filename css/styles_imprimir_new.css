@@ -1,10 +1,10 @@
 @media print {
     @page {
         /* Tamaño A4 (por defecto) */
-        /* size: A4;*/
+        size: A4;
 
         /* Tamaño Carta (Letter - EE.UU.) */
-        size: Letter; 
+        /* size: Letter; */
 
         /* Tamaño personalizado (ej: 15cm x 20cm) */
         /* size: 15cm 20cm; */

@@ -9,7 +9,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <link rel="stylesheet" type="text/css" href="https://npmcdn.com/flatpickr/dist/themes/dark.css">
-    <link rel="icon" type="image/png" href="img/favicon.png">
+    <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="img/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="css/estilos.css">
 </head>
 
@@ -33,7 +34,7 @@
                             <input type="text" id="buscar-paciente" class="form-control form-control-sm"
                                 placeholder="Ingrese los datos del usuario" autocomplete="off">
                             <div id="resultados-paciente" class="search-results d-none">
-                                
+
                             </div>
                         </div>
                     </div>
@@ -284,7 +285,7 @@
 
             <div class="footer-legal">
                 <p>&copy; 2025 CSMC Dos de Junio. Todos los derechos reservados.</p>
-                <p><small>v2.2.1 | Última actualización: 09 Mayo 2025</small></p>
+                <p><small>v3.0 | Última actualización: 27 Mayo 2025</small></p>
                 <p>Ingeniero de sistemas - Edward Rivera Moreno</p>
             </div>
         </div>

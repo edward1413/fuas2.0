@@ -8,16 +8,16 @@
     <meta name="description" content="Sistema de actualización masiva de usuarios">
 
     <!-- Preload critical resources -->
-    <link rel="preload" href="styles/styles_actualizar.css" as="style">
-    <link rel="preload" href="scripts/script_actualizar.js" as="script">
+    <link rel="preload" href="css/styles_actualizar.css" as="style">
+    <link rel="preload" href="js/script_actualizar.js" as="script">
 
     <!-- CSS -->
-    <link rel="stylesheet" href="styles/styles_actualizar.css">
+    <link rel="stylesheet" href="css/styles_actualizar.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="imagenes/favicon.png">
-    <link rel="apple-touch-icon" href="imagenes/favicon.png">
+    <link rel="icon" type="img/png" href="img/favicon.ico">
+    <link rel="apple-touch-icon" href="img/favicon.png">
 
     <!-- Preconnect to external domains -->
     <link rel="preconnect" href="https://cdn.jsdelivr.net">
@@ -28,10 +28,10 @@
         <!-- Encabezado con logo -->
         <header class="page-header">
             <div class="header-logo">
-                <img src="imagenes/favicon.png" alt="Logo CSMC" width="60">
+                <img src="img/favicon.png" alt="Logo CSMC" width="60">
             </div>
             <div>
-                <h1>ACTUALIZAR USUARIOS</h1>
+                <h1 class="text-center">ACTUALIZAR USUARIOS</h1>
                 <p class="subtitle">Sube un archivo CSV o ZIP con los datos de los usuarios a actualizar</p>
             </div>
         </header>
@@ -42,12 +42,23 @@
                 <div class="form-group">
                     <label for="inputGroupFile04" class="file-label">
                         <i class="bi bi-cloud-arrow-up-fill"></i>
-                        <span id="fileName">Seleccionar archivo CSV o ZIP</span>
+                        <span id="fileName">Arrastra tu archivo aquí o haz clic para seleccionar</span>
+                        <small>Archivos CSV o ZIP (máximo 10MB)</small>
                     </label>
                     <input type="file" class="form-control" id="inputGroupFile04" aria-describedby="fileHelp"
-                        name="file" accept=".csv, .zip" required aria-label="Seleccionar archivo CSV o ZIP">
+                        name="file" accept=".csv,.zip" required aria-label="Seleccionar archivo CSV o ZIP">
+
+                    <div class="file-info" id="fileInfo">
+                        <i class="bi bi-check-circle-fill"></i>
+                        <span id="fileDetails"></span>
+                    </div>
+
                     <small id="fileHelp" class="help-text">
-                        <i class="bi bi-info-circle"></i> Archivos .csv o .zip hasta 5MB.
+                        <span class="tooltip">
+                            <i class="bi bi-info-circle"></i> Formatos aceptados: CSV, ZIP
+                            <span class="tooltiptext">Los archivos CSV deben tener codificación UTF-8. Los ZIP pueden
+                                contener múltiples CSVs.</span>
+                        </span>
                     </small>
                 </div>
             </div>
@@ -66,20 +77,19 @@
 
         <!-- Respuesta del servidor con más estructura -->
         <div id="response" role="alert" aria-atomic="true"></div>
-
     </div>
 
     <!-- Pie de página mejorado -->
     <footer class="site-footer">
         <div class="footer-content">
             <div class="footer-brand">
-                <img src="imagenes/favicon.png" alt="Logo CSMC" width="40">
-                <p><strong>Centro de Salud Mental Comunitario<br>Dos de Junio</p></strong>
+                <img src="img/favicon.png" alt="Logo CSMC" width="40">
+                <p><strong>Centro de Salud Mental Comunitario<br>Dos de Junio</strong></p>
             </div>
 
             <div class="footer-contact">
                 <p><i class="bi bi-geo-alt-fill"></i> Av. Los Incas Mz. I - Lt. 2, Chimbote</p>
-                <p><i class="bi bi-telephone-fill"></i> <strong>Fijo:</strong> (043) 700697</p>
+                <p><i class="bi bi-telephone-fill"></i> <strong>Fijo: </strong> (043) 700697</p>
                 <p><i class="bi bi-envelope-fill"></i> csmcdosdejunio2020@gmail.com</p>
             </div>
 
@@ -91,14 +101,14 @@
 
             <div class="footer-legal">
                 <p>&copy; 2025 CSMC Dos de Junio. Todos los derechos reservados.</p>
-                <p><small>v2.1.0 | Última actualización: Mayo 2025</small></p>
+                <p><small>v3.1 | Última actualización: Mayo 2025</small></p>
                 <p>Ingeniero de sistemas - Edward Rivera Moreno</p>
             </div>
         </div>
     </footer>
 
     <!-- JavaScript con carga diferida -->
-    <script src="scripts/script_actualizar.js" defer></script>
+    <script src="js/script_actualizar.js" defer></script>
 </body>
 
 </html>
