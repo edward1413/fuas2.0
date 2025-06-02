@@ -51,12 +51,13 @@ if (!empty($nombrePersonal)) {
                     htmlspecialchars($fila['nombres_personal']) . ' ' .
                     htmlspecialchars($fila['apellido_paterno_personal']) . ' ' .
                     htmlspecialchars($fila['apellido_materno_personal']) . '</div>' .
+                    '<div class="contenedor-search">' .
                     '<div class="small fw-bold">Número de documento: </div>' .
-                    '<div id="resultado-documento-personal" class="small">' . htmlspecialchars($numeroDocumentoPersonal) . '</div>' .
+                    '<div id="resultado-documento-personal" class="small">' . htmlspecialchars($numeroDocumentoPersonal) . '</div>' . '</div>' .
                     '</div>';
             }
         } else {
-            echo '<div class="search-item text-muted">No se encontraron resultados.</div>';
+            echo '<div class="search-item">No se encontraron resultados.</div>';
         }
 
         $stmt->close();

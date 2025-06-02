@@ -30,14 +30,15 @@ if (!empty($codigoCIE10)) {
         if ($resultado->num_rows > 0) {
             while ($fila = $resultado->fetch_assoc()) {
                 echo '<div class="search-item" data-codigo="' . htmlspecialchars($fila['codigo_cie10']) . '">' .
-                    '<div id="resultado-descripcion-cie10" class="fw-bold">' . 
+                    '<div id="resultado-descripcion-cie10" class="fw-bold">' .
                     htmlspecialchars($fila['descripcion_cie10']) . '</div>' .
+                    '<div class="contenedor-search">' .
                     '<div class="small fw-bold">CIE-10: </div>' .
-                    '<div id="resultado-codigo-cie10" class="small">' . htmlspecialchars($fila['codigo_cie10']) . '</div>' .
+                    '<div id="resultado-codigo-cie10" class="small">' . htmlspecialchars($fila['codigo_cie10']) . '</div>' . '</div>' .
                     '</div>';
             }
         } else {
-            echo '<div class="search-item text-muted">No se encontraron resultados.</div>';
+            echo '<div class="search-item">No se encontraron resultados.</div>';
         }
 
         $stmt->close();

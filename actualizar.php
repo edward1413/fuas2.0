@@ -79,27 +79,26 @@
         <div id="response" role="alert" aria-atomic="true"></div>
     </div>
 
-    <!-- Pie de página mejorado -->
-    <footer class="site-footer">
-        <div class="footer-content">
-            <div class="footer-brand">
+    <!-- Footer moderno -->
+    <footer class="site-footer form-grid">
+        <div class="footer-content row">
+            <div class="footer-brand col-md-3">
                 <img src="img/favicon.png" alt="Logo CSMC" width="40">
                 <p><strong>Centro de Salud Mental Comunitario<br>Dos de Junio</strong></p>
             </div>
-
-            <div class="footer-contact">
+            <div class="footer-contact col-md-3">
                 <p><i class="bi bi-geo-alt-fill"></i> Av. Los Incas Mz. I - Lt. 2, Chimbote</p>
                 <p><i class="bi bi-telephone-fill"></i> <strong>Fijo: </strong> (043) 700697</p>
                 <p><i class="bi bi-envelope-fill"></i> csmcdosdejunio2020@gmail.com</p>
             </div>
 
-            <div class="footer-social">
+            <div class="footer-social col-md-3">
                 <a href="https://www.facebook.com/profile.php?id=100069548143051" target="_blank"
                     aria-label="Facebook CSMC"><i class="bi bi-facebook"></i> Facebook CSMC DOS DE JUNIO
                 </a>
             </div>
 
-            <div class="footer-legal">
+            <div class="footer-legal col-md-3">
                 <p>&copy; 2025 CSMC Dos de Junio. Todos los derechos reservados.</p>
                 <p><small>v3.1 | Última actualización: Mayo 2025</small></p>
                 <p>Ingeniero de sistemas - Edward Rivera Moreno</p>

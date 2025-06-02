@@ -48,12 +48,13 @@ if (!empty($nombrePaciente)) {
                     htmlspecialchars($fila['nombres_paciente']) . ' ' .
                     htmlspecialchars($fila['apellido_paterno_paciente']) . ' ' .
                     htmlspecialchars($fila['apellido_materno_paciente']) . '</div>' .
+                    '<div class="contenedor-search">' .
                     '<div class="small fw-bold">Número de documento: </div>' .
-                    '<div id="resultado-documento-paciente" class="small">' . htmlspecialchars($numeroDocumentoPaciente) . '</div>' .
+                    '<div id="resultado-documento-paciente" class="small">' . htmlspecialchars($numeroDocumentoPaciente) . '</div>' . '</div>' .
                     '</div>';
             }
         } else {
-            echo '<div class="search-item text-muted">No se encontraron resultados.</div>';
+            echo '<div class="search-item">No se encontraron resultados.</div>';
         }
 
         $stmt->close();
